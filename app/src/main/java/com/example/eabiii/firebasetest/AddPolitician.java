@@ -19,6 +19,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class AddPolitician extends AppCompatActivity {
 
 
@@ -65,9 +68,12 @@ public class AddPolitician extends AppCompatActivity {
             dbRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
-                    addPol.child("name").setValue(pName);
-                    addPol.child("position").setValue(pPosition);
-                    addPol.child("partylist").setValue(pPartylist).addOnCompleteListener(new OnCompleteListener<Void>() {
+
+                    Map newPost=new HashMap();
+                    newPost.put("name",pName);
+                    newPost.put("position",pPosition);
+                    newPost.put("partylist",pPartylist);
+                    dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
@@ -75,6 +81,18 @@ public class AddPolitician extends AppCompatActivity {
                         }
                     });
 
+
+                    //addPol.child("name").setValue(pName);
+                    //addPol.child("position").setValue(pPosition);
+                    /*
+                    addPol.child("partylist").setValue(pPartylist).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+                        }
+                    });
+*/
 
 
 

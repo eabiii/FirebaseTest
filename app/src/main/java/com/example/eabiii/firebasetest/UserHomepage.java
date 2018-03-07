@@ -54,38 +54,8 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
 
     private FragmentStatePagerAdapter fragmentStatePagerAdapter;
     private ViewPager viewPager;
-/*
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+    private Button testing;
 
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_dashboard:
-                    Toast.makeText(UserHomepage.this,"Dashboard",Toast.LENGTH_SHORT).show();
-                   // mTextMessage.setText(R.string.title_dashboard);
-                    return true;
-                case R.id.navigation_posts:
-                    Toast.makeText(UserHomepage.this,"Posts",Toast.LENGTH_SHORT).show();
-
-                    // mTextMessage.setText(R.string.title_post);
-                    return true;
-                case R.id.navigation_candidates:
-                    Toast.makeText(UserHomepage.this,"Candidates",Toast.LENGTH_SHORT).show();
-
-                    // mTextMessage.setText(R.string.title_candidates);
-                    return true;
-                case R.id.navigation_partylist:
-                    Toast.makeText(UserHomepage.this,"Party List",Toast.LENGTH_SHORT).show();
-
-                    //mTextMessage.setText(R.string.title_partylist);
-                    return true;
-            }
-            return false;
-        }
-    };
-
-*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +66,14 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
         txtName=findViewById(R.id.name_Text);
         BottomNavigationView btmNav=findViewById(R.id.navigation);
         btmNav.setOnNavigationItemSelectedListener(this);
+        testing=findViewById(R.id.btnTestAdd);
+        testing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(UserHomepage.this,AddPolitician.class);
+                startActivity(intent);
+            }
+        });
         mAuth=FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
         loadInfo();
@@ -273,10 +251,10 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
                 fragment=new FragmentPost();
                 break;
             case R.id.navigation_candidates:
-                fragment=new FragmentPost();
+                fragment=new FragmentPolitician();
                 break;
             case R.id.navigation_partylist:
-                fragment=new FragmentPost();
+                fragment=new FragmentPartyList();
                 break;
 
 

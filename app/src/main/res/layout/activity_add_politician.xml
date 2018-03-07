@@ -32,7 +32,7 @@
         app:layout_constraintTop_toBottomOf="@+id/txtRestaurant" />
 
     <TextView
-        android:id="@+id/editPosition"
+        android:id="@+id/txtPosi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Position"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/editName" />
 
     <EditText
-        android:id="@+id/addDesc"
+        android:id="@+id/editPosition"
         android:layout_width="300dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
@@ -52,7 +52,7 @@
         app:layout_constraintBottom_toTopOf="@+id/txtWeight"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPosition" />
+        app:layout_constraintTop_toBottomOf="@+id/txtPosi" />
 
     <TextView
         android:id="@+id/txtWeight"
