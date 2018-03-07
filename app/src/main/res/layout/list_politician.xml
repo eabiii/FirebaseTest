@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/txtPoliName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Poli Name"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="33dp" />
+
+    <TextView
+        android:id="@+id/txtPartyList"
+        android:layout_width="wrap_content"
+        android:layout_height="31dp"
+        android:text="Party List"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="83dp" />
+
+    <TextView
+        android:id="@+id/txtPosition"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Position"
+        tools:layout_editor_absoluteX="58dp"
+        tools:layout_editor_absoluteY="64dp" />
+</android.support.constraint.ConstraintLayout>

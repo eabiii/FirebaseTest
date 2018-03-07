@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_dashboard"
+        android:icon="@drawable/ic_dashboard_black_24dp"
+        android:title="@string/title_dashboard" />
+
+    <item
+        android:id="@+id/navigation_posts"
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="@string/title_post" />
+    <item
+        android:id="@+id/navigation_candidates"
+        android:icon="@drawable/ic_candidates_black_24dp"
+        android:title="@string/title_candidates" />
+    <item
+        android:id="@+id/navigation_partylist"
+        android:icon="@drawable/ic_party_list_black_24dp"
+        android:title="@string/title_partylist" />
+
+</menu>
