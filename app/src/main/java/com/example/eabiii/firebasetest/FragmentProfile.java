@@ -43,6 +43,9 @@ public class FragmentProfile extends Fragment {
     FirebaseAuth.AuthStateListener mAuthListener;
     FirebaseUser mCurrentUser;
     DatabaseReference dbRef;
+    FirebaseRecyclerOptions<PostModel> options;
+    FirebaseRecyclerAdapter fAdapter;
+    Query dbFinalRef;
     private String userName;
     private String fullName;
 
@@ -80,7 +83,9 @@ public class FragmentProfile extends Fragment {
             }
         });
         loadInfo();
+        dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
 
+        //recyclerview.setAdapter(fAdapter);
 
         return view;
     }
@@ -91,10 +96,9 @@ public class FragmentProfile extends Fragment {
 
       //  Log.d("USERCURRENT",UserHomepage.userName);
         //mAuth.addAuthStateListener(mAuthListener);
-        Query dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
-        FirebaseRecyclerOptions<PostModel> options=new FirebaseRecyclerOptions.Builder<PostModel>()
+        options=new FirebaseRecyclerOptions.Builder<PostModel>()
                 .setQuery(dbFinalRef,PostModel.class).build();
-        FirebaseRecyclerAdapter fAdapter=new FirebaseRecyclerAdapter<PostModel,FragmentPost.PostHolder>(options) {
+        fAdapter=new FirebaseRecyclerAdapter<PostModel,FragmentPost.PostHolder>(options) {
 
             @Override
             public FragmentPost.PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -124,8 +128,9 @@ public class FragmentProfile extends Fragment {
                 });
             }
         };
-        fAdapter.startListening();
         recyclerview.setAdapter(fAdapter);
+        fAdapter.startListening();
+
 
     }
 
@@ -163,6 +168,11 @@ public class FragmentProfile extends Fragment {
             }
         });
 
+
+
+    }
+
+    private void setupRecycler(){
 
 
     }
