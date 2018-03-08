@@ -22,6 +22,8 @@
         <activity android:name=".UserHomepage" />
         <activity android:name=".PostActivity" />
         <activity android:name=".ViewSinglePost" />
+        <activity android:name=".ViewPolitician" />
+        <activity android:name=".RatePolitician" />
         <activity android:name=".AddPolitician"></activity>
     </application>
 

@@ -58,7 +58,7 @@
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <Button
-        android:id="@+id/btnComment"
+        android:id="@+id/btnRate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
@@ -78,7 +78,7 @@
         android:inputType="textPersonName"
         android:hint="Comment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btnComment"
+        app:layout_constraintEnd_toStartOf="@+id/btnRate"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/commentView" />
 </android.support.constraint.ConstraintLayout>

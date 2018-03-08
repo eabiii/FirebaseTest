@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +49,7 @@ public class FragmentProfile extends Fragment {
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
     private TextView txt,mTextMessage,txtName;
+    private FloatingActionButton fab;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
@@ -61,7 +64,7 @@ public class FragmentProfile extends Fragment {
         //pAdapter=new PostAdapter(pModel);
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
-
+        fab=view.findViewById(R.id.fab);
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         String key=FirebaseDatabase.getInstance().getReference().child("Post").getKey();
         mAuth=FirebaseAuth.getInstance();
@@ -69,44 +72,16 @@ public class FragmentProfile extends Fragment {
         post=view.findViewById(R.id.btnPost);
         mCurrentUser=mAuth.getCurrentUser();
         logout=view.findViewById(R.id.btnLogOut);
-        loadInfo();
-        /*
-        BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onNavigationItemSelected( MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_dashboard:
-                        ((UserHomepage)getActivity()).setViewPager(0);
-                     //   Toast.makeText(UserHomepage.this,"Dashboard",Toast.LENGTH_SHORT).show();
-                        // mTextMessage.setText(R.string.title_dashboard);
-                        return true;
-                    case R.id.navigation_posts:
-                        ((UserHomepage)getActivity()).setViewPager(1);
-                      //  Toast.makeText(UserHomepage.this,"Posts",Toast.LENGTH_SHORT).show();
-
-                        // mTextMessage.setText(R.string.title_post);
-                        return true;
-                    case R.id.navigation_candidates:
-                        ((UserHomepage)getActivity()).setViewPager(2);
-                       // Toast.makeText(UserHomepage.this,"Candidates",Toast.LENGTH_SHORT).show();
-
-                        // mTextMessage.setText(R.string.title_candidates);
-                        return true;
-                    case R.id.navigation_partylist:
-                        ((UserHomepage)getActivity()).setViewPager(3);
-                        //Toast.makeText(UserHomepage.this,"Party List", Toast.LENGTH_SHORT).show();
-
-                        //mTextMessage.setText(R.string.title_partylist);
-                        return true;
-                }
-                return false;
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),PostActivity.class));
+                Snackbar.make(view,"Add Post",Snackbar.LENGTH_LONG).setAction("Action",null).show();
             }
-        };
-        */
-//        BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
-  //      navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        });
+        loadInfo();
+
+
         return view;
     }
 

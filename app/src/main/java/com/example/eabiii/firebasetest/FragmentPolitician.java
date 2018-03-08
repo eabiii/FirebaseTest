@@ -2,6 +2,7 @@ package com.example.eabiii.firebasetest;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -38,7 +39,7 @@ public class FragmentPolitician extends Fragment {
     DatabaseReference dbRef;
     private String userName;
     private String fullName;
-
+    private FloatingActionButton fab;
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
     private TextView txt,mTextMessage,txtName;
@@ -56,7 +57,13 @@ public class FragmentPolitician extends Fragment {
         //pAdapter=new PostAdapter(pModel);
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
-
+        fab=view.findViewById(R.id.fab3);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),AddPolitician.class));
+            }
+        });
         dbRef= FirebaseDatabase.getInstance().getReference().child("Politician");
         String key=FirebaseDatabase.getInstance().getReference().child("Politician").getKey();
         mAuth=FirebaseAuth.getInstance();
@@ -90,7 +97,7 @@ public class FragmentPolitician extends Fragment {
             protected void onBindViewHolder(PoliticianViewHolder holder, int position, PoliticianModel model) {
                 // model=pModel.get(position);
                 final String POST_KEY=getRef(position).getKey().toString();
-                Log.d("Poli Key",POST_KEY);
+                Log.d("Poli Name",POST_KEY);
                 holder.getTxtPoli().setText(model.getName());
                 holder.getTxtParty().setText(model.getPosition());
                 holder.getTxtPos().setText(model.getPartylist());
@@ -99,8 +106,8 @@ public class FragmentPolitician extends Fragment {
                     @Override
                     public void onClick(View view) {
                         Log.d("Post Key",POST_KEY);
-                        Intent intent=new Intent(getActivity(),ViewSinglePost.class);
-                        intent.putExtra("Post ID",POST_KEY);
+                        Intent intent=new Intent(getActivity(),ViewPolitician.class);
+                        intent.putExtra("Poli Name",POST_KEY);
                         startActivity(intent);
                     }
                 });

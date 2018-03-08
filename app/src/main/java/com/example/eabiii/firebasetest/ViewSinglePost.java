@@ -1,7 +1,6 @@
 package com.example.eabiii.firebasetest;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -29,8 +28,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -70,7 +67,7 @@ public class ViewSinglePost extends AppCompatActivity {
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         POST_KEY=getIntent().getExtras().get("Post ID").toString();
         mAuth=FirebaseAuth.getInstance();
-        addComment=findViewById(R.id.btnComment);
+        addComment=findViewById(R.id.btnRate);
         editComment=findViewById(R.id.txtComment);
         editComment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override

@@ -52,14 +52,29 @@
             android:textSize="20sp" />
     </LinearLayout>
 -->
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab2"
+        android:layout_width="58dp"
+        android:layout_height="53dp"
+        android:layout_marginBottom="22dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="311dp"
+        android:clickable="true"
+        app:backgroundTint="@color/cardview_light_background"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@android:drawable/ic_input_add"
+        tools:ignore="MissingConstraints" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/postView"
         android:layout_width="368dp"
-        android:layout_height="308dp"
-        android:layout_marginBottom="8dp"
+        android:layout_height="237dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/fab2"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +43,7 @@ public class FragmentPost extends Fragment {
     DatabaseReference dbRef;
     private String userName;
     private String fullName;
-
+    private FloatingActionButton fab;
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
     private TextView txt,mTextMessage,txtName;
@@ -68,42 +69,16 @@ public class FragmentPost extends Fragment {
         post=view.findViewById(R.id.btnPost);
         mCurrentUser=mAuth.getCurrentUser();
         logout=view.findViewById(R.id.btnLogOut);
+        fab=view.findViewById(R.id.fab2);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),PostActivity.class));
+            }
+        });
+
         loadInfo();
 
-       /* BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-                = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-            @Override
-            public boolean onNavigationItemSelected( MenuItem item) {
-                switch (item.getItemId()) {
-                    case R.id.navigation_dashboard:
-                        ((UserHomepage)getActivity()).setViewPager(0);
-                        //   Toast.makeText(UserHomepage.this,"Dashboard",Toast.LENGTH_SHORT).show();
-                        // mTextMessage.setText(R.string.title_dashboard);
-                        return true;
-                    case R.id.navigation_posts:
-                        ((UserHomepage)getActivity()).setViewPager(1);
-                        //  Toast.makeText(UserHomepage.this,"Posts",Toast.LENGTH_SHORT).show();
-
-                        // mTextMessage.setText(R.string.title_post);
-                        return true;
-                    case R.id.navigation_candidates:
-                        ((UserHomepage)getActivity()).setViewPager(2);
-                        // Toast.makeText(UserHomepage.this,"Candidates",Toast.LENGTH_SHORT).show();
-
-                        // mTextMessage.setText(R.string.title_candidates);
-                        return true;
-                    case R.id.navigation_partylist:
-                        ((UserHomepage)getActivity()).setViewPager(3);
-                        //Toast.makeText(UserHomepage.this,"Party List", Toast.LENGTH_SHORT).show();
-
-                        //mTextMessage.setText(R.string.title_partylist);
-                        return true;
-                }
-                return false;
-            }
-        };
-        */
         //BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
         //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         return view;
