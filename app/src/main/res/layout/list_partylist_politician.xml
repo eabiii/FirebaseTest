@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
     <RelativeLayout
         android:layout_width="368dp"
         android:layout_height="141dp"
@@ -12,19 +14,20 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="80dp">
+
 
 
         <TextView
-            android:id="@+id/txtParty"
+            android:id="@+id/poliName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
+            android:layout_alignBottom="@+id/post_image"
+            android:layout_alignEnd="@+id/post_title_txtview"
+            android:layout_alignRight="@+id/post_title_txtview"
+            android:layout_marginBottom="19dp"
             android:text="USER" />
-
-
     </RelativeLayout>
-
 
 </android.support.constraint.ConstraintLayout>

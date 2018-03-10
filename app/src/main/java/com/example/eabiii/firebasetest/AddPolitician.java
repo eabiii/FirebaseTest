@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -19,7 +21,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class AddPolitician extends AppCompatActivity {
@@ -27,6 +31,8 @@ public class AddPolitician extends AppCompatActivity {
 
     private EditText name, position,partylist;
     private Button add;
+    List<String> dbPartylist=new ArrayList<String>();
+    Spinner spinner;
     FirebaseDatabase db;
     DatabaseReference dbRef;
     FirebaseAuth mAuth;
@@ -38,14 +44,39 @@ public class AddPolitician extends AppCompatActivity {
         setContentView(R.layout.activity_add_politician);
         name=findViewById(R.id.editName);
         position=findViewById(R.id.editPosition);
-        partylist=findViewById(R.id.editPartylist);
+      //  partylist=findViewById(R.id.editPartylist);
         mAuth=FirebaseAuth.getInstance();
-        add=findViewById(R.id.btnAddPoli);
+        spinner=findViewById(R.id.editPartylist);
+        add=findViewById(R.id.btnAddParty);
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Log.d("CLICK ME","CLICK");
                 addPolitician();
+            }
+        });
+        DatabaseReference dbGetParty= FirebaseDatabase.getInstance().getReference().child("PartyList");
+        dbGetParty.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+
+                    String dbValue= String.valueOf(dataSnapshot1.getValue());
+                    Log.d("Party",dbValue);
+                    dbPartylist.add(dbValue);
+
+                }
+
+                ArrayAdapter<String>partylistAdapter=new ArrayAdapter<String>(AddPolitician.this,android.R.layout.simple_spinner_item,dbPartylist);
+                partylistAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spinner.setAdapter(partylistAdapter);
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
             }
         });
         //dbRef=FirebaseDatabase.getInstance().getReference().child(pName);
@@ -60,7 +91,7 @@ public class AddPolitician extends AppCompatActivity {
         Log.d("ENTER","ENTER");
         final String pName=name.getText().toString().trim();
         final String pPosition=position.getText().toString().trim();
-        final String pPartylist=partylist.getText().toString().trim();
+        final String pPartylist=spinner.getSelectedItem().toString();
 
         if(checkIfPoliticianExist(pName)){
             dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
@@ -73,14 +104,15 @@ public class AddPolitician extends AppCompatActivity {
                     newPost.put("name",pName);
                     newPost.put("position",pPosition);
                     newPost.put("partylist",pPartylist);
-                    dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    dbRef.setValue(newPost);
+                    /*.addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(AddPolitician.this,UserHomepage.class));
                         }
                     });
-
+*/
 
                     //addPol.child("name").setValue(pName);
                     //addPol.child("position").setValue(pPosition);
@@ -93,7 +125,26 @@ public class AddPolitician extends AppCompatActivity {
                         }
                     });
 */
+                dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
+                dbRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Map newPost=new HashMap();
+                        newPost.put(pName,pName);
+                        dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+                            }
+                        });
+                    }
 
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
 
 
                 }

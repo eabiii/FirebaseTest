@@ -2,7 +2,9 @@ package com.example.eabiii.firebasetest;
 
 import android.content.Context;
 import android.support.design.widget.BaseTransientBottomBar;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -40,9 +42,12 @@ public class ViewSinglePost extends AppCompatActivity {
     private ImageView img;
     private TextView postTitle,postDesc;
     private ArrayList<CommentModel> commentModels=new ArrayList<>();
-    private Button addComment;
+   // private Button addComment;
     private EditText editComment;
+    private FloatingActionButton fabcomment;
+
     String username="";
+    String userComment="";
     RecyclerView rvComment;
     CommentAdapter cAdapter;
     String POST_KEY="";
@@ -58,6 +63,7 @@ public class ViewSinglePost extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_single_post);
+      //  final TextInputLayout til=findViewById(R.id.textInputLayout);
         img=findViewById(R.id.singleImageview);
         postTitle=findViewById(R.id.singleTitle);
         postDesc=findViewById(R.id.singleDesc);
@@ -67,8 +73,9 @@ public class ViewSinglePost extends AppCompatActivity {
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         POST_KEY=getIntent().getExtras().get("Post ID").toString();
         mAuth=FirebaseAuth.getInstance();
-        addComment=findViewById(R.id.btnRate);
-        editComment=findViewById(R.id.txtComment);
+     //   addComment=findViewById(R.id.btnRate);
+
+        /*
         editComment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -78,6 +85,7 @@ public class ViewSinglePost extends AppCompatActivity {
                 }
             }
         });
+        */
         dbRef.child(POST_KEY).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -97,6 +105,47 @@ public class ViewSinglePost extends AppCompatActivity {
             }
         });
         setupFirebase();
+        editComment=findViewById(R.id.txtComment);
+        fabcomment=findViewById(R.id.fabcomment);
+
+        editComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!(view instanceof EditText)){
+
+                    view.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            hideKeyboard();
+                        }
+                    });
+                }
+                editComment.setBackgroundResource(android.R.drawable.editbox_background_normal);
+                InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(editComment,InputMethodManager.SHOW_FORCED);
+            }
+        });
+
+        fabcomment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                userComment=editComment.getText().toString();
+                if(validate()){
+
+                    dbSave=FirebaseDatabase.getInstance().getReference().child("Post").child(POST_KEY);
+                    DatabaseReference dbfinal=dbSave.child("comments").child(username);
+//                    String saveComment=editComment.getText().toString().trim();
+                    Map save=new HashMap();
+                    save.put("username",username);
+                    save.put("comment",userComment);
+                    dbfinal.setValue(save);
+                    fAdapter.notifyDataSetChanged();
+
+
+                }
+            }
+        });
+        /*
         addComment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +164,7 @@ public class ViewSinglePost extends AppCompatActivity {
                     }
             }
         });
+        */
         dbComment=FirebaseDatabase.getInstance().getReference().child("Comments");
 
 
@@ -182,7 +232,7 @@ public class ViewSinglePost extends AppCompatActivity {
 
     private boolean validate(){
 
-        if(editComment.getText().toString().length()==0){
+        if(userComment.length()==0){
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(editComment.getWindowToken(), 0);
             displaySnackbar("Please Enter Something");
@@ -192,6 +242,11 @@ public class ViewSinglePost extends AppCompatActivity {
 
 
     }
+
+    private void hideKeyboard(){
+
+        InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(editComment.getWindowToken(), 0);    }
 
     private void displaySnackbar(String msg){
         Snackbar sb=Snackbar.make(findViewById(R.id.singlePost),msg, BaseTransientBottomBar.LENGTH_LONG);

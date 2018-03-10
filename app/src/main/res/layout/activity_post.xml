@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:background="@drawable/background"
     android:layout_height="match_parent">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="250dp"
             android:adjustViewBounds="true"
+            android:background="@drawable/addimage"
             android:scaleType="centerCrop"></ImageButton>
 
         <EditText
@@ -27,9 +29,9 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="20dp"
-            android:hint="Post Title"
+            android:hint="Title"
             android:padding="10dp"
-            android:textColor="@color/common_google_signin_btn_text_dark_focused"
+
             android:textStyle="bold" />
 
         <EditText
@@ -39,8 +41,8 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="20dp"
-            android:hint="Post Description"
             android:padding="10dp"
+            android:hint="Description"
             android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
         <Button

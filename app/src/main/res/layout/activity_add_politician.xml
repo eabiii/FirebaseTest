@@ -67,7 +67,7 @@
         app:layout_constraintRight_toRightOf="parent" />
 
     <Button
-        android:id="@+id/btnAddPoli"
+        android:id="@+id/btnAddParty"
         android:layout_width="131dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="220dp"
@@ -87,8 +87,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/btnAddPoli" />
+        app:layout_constraintStart_toEndOf="@+id/btnAddParty" />
+    <Spinner
+        android:id="@+id/editPartylist"
+        android:layout_width="291dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:ems="10"
+        android:inputType="text"
 
+        app:layout_constraintBottom_toTopOf="@+id/btnAddParty"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"></Spinner>
+<!--
     <EditText
         android:id="@+id/editPartylist"
         android:layout_width="291dp"
@@ -99,6 +110,7 @@
         app:layout_constraintBottom_toTopOf="@+id/btnAddPoli"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
+        -->
 <!--
     <EditText
         android:id="@+id/editName"

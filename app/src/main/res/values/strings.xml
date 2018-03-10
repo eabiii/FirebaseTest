@@ -1,5 +1,5 @@
 <resources>
-   <!-- <string name="app_name">FirebaseTest</string> -->
+    <!-- <string name="app_name">FirebaseTest</string> -->
     <string name="app_name">rottenPolitics</string>
     <string name="title_activity_profile">profile</string>
     <string name="title_home">Home</string>

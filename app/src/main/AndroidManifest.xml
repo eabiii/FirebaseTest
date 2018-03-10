@@ -24,7 +24,9 @@
         <activity android:name=".ViewSinglePost" />
         <activity android:name=".ViewPolitician" />
         <activity android:name=".RatePolitician" />
-        <activity android:name=".AddPolitician"></activity>
+        <activity android:name=".AddPartyList" />
+        <activity android:name=".AddPolitician" />
+        <activity android:name=".ViewPartylistMember"></activity>
     </application>
 
 </manifest>

@@ -6,12 +6,15 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -47,7 +50,7 @@ public class FragmentPartyList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, final Bundle savedInstanceState){
 
         View view=inflater.inflate(R.layout.fragment_partylist,container,false);
-        recyclerview=view.findViewById(R.id.poliView);
+        recyclerview=view.findViewById(R.id.partyView);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         //pAdapter=new PostAdapter(pModel);
         mTextMessage = (TextView) view.findViewById(R.id.message);
@@ -60,7 +63,7 @@ public class FragmentPartyList extends Fragment {
             }
         });
         */
-        dbRef= FirebaseDatabase.getInstance().getReference().child("Politician");
+        dbRef= FirebaseDatabase.getInstance().getReference().child("PartyList");
         String key=FirebaseDatabase.getInstance().getReference().child("Politician").getKey();
         mAuth=FirebaseAuth.getInstance();
         txt=view.findViewById(R.id.txtName);
@@ -68,7 +71,59 @@ public class FragmentPartyList extends Fragment {
         mCurrentUser=mAuth.getCurrentUser();
         logout=view.findViewById(R.id.btnLogOut);
         loadInfo();
+
+        fab=view.findViewById(R.id.fab4);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(),AddPartyList.class));
+            }
+        });
+
+
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+
+        FirebaseRecyclerOptions<PartylistModel> options=new FirebaseRecyclerOptions.Builder<PartylistModel>()
+                .setQuery(dbRef,PartylistModel.class).build();
+        FirebaseRecyclerAdapter fAdapter=new FirebaseRecyclerAdapter<PartylistModel,PartylistViewHolder>(options) {
+
+            @Override
+            public PartylistViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+                View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_partylist,parent,false);
+
+                return new  PartylistViewHolder(view);
+            }
+
+            @Override
+            protected void onBindViewHolder(PartylistViewHolder holder, int position, PartylistModel model) {
+                // model=pModel.get(position);
+                final String PARTY_KEY=getRef(position).getKey().toString();
+
+                Log.d("Party Name",PARTY_KEY);
+              //  holder.getTxtPoli().setText(model.getName());
+                holder.getTxtParty().setText(model.getName());
+              //  holder.getTxtPos().setText(model.getPartylist());
+                //  Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Log.d("Post Key",PARTY_KEY);
+                        Intent intent=new Intent(getActivity(),ViewPolitician.class);
+                        intent.putExtra("Party List",PARTY_KEY);
+
+                        startActivity(intent);
+                    }
+                });
+            }
+        };
+        fAdapter.startListening();
+        recyclerview.setAdapter(fAdapter);
     }
 
 
