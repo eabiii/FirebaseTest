@@ -53,6 +53,7 @@ public class PostActivity extends AppCompatActivity {
         desc=findViewById(R.id.txtDesc);
         mAuth=FirebaseAuth.getInstance();
         path= FirebaseStorage.getInstance().getReference();
+        dbRef=FirebaseDatabase.getInstance().getReference().child("Post");
         mCurrentUser=mAuth.getCurrentUser();
         dbUser=FirebaseDatabase.getInstance().getReference().child("Users").child(encodeString(mCurrentUser.getEmail()));
         loadInfo();
@@ -76,7 +77,7 @@ public class PostActivity extends AppCompatActivity {
 
                 }
                 else{
-                    Toast.makeText(getApplicationContext(),"Successfull Posted",Toast.LENGTH_SHORT).show();
+
                     try{
 
                     }catch(Exception e){}
@@ -94,20 +95,20 @@ public class PostActivity extends AppCompatActivity {
 
                             final String image=get;
 
-                            dbRef=db.getInstance().getReference().child("Post").child(userName);
+                          //  dbRef=db.getInstance().getReference().child("Post").child(userName);
                             final DatabaseReference addPost=dbRef.push();
                             dbUser.addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-
+/*
                                     Map newPost=new HashMap();
                                     newPost.put("title",dbTitle);
                                     newPost.put("desc",dbDesc);
                                     newPost.put("image",image);
                                     newPost.put("username",userName);
+*/
+                                   // Toast.makeText(getApplicationContext(),"Successfull Posted",Toast.LENGTH_SHORT).show();
 
-
-                                    /*
                                     addPost.child("title").setValue(dbTitle);
                                     addPost.child("desc").setValue(dbDesc);
                                     addPost.child("image").setValue(image);
@@ -119,7 +120,7 @@ public class PostActivity extends AppCompatActivity {
                                         }
                                     });
 
-                                    */
+
                                     // addPost.child("username").setValue(dataSnapshot.child("username"))
 
                                 }

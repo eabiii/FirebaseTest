@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     FirebaseAuth mAuth;
     EditText email, pass;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         pass=findViewById(R.id.pw_Edit);
         findViewById(R.id.login_Btn).setOnClickListener(this);
         findViewById(R.id.register_Btn).setOnClickListener(this);
+        progressDialog=new ProgressDialog(MainActivity.this);
+        progressDialog.setMessage("Loading...");
+        progressDialog.setTitle("Fetching Data");
     }
 
     private String encodeString(String s){
@@ -39,27 +44,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void login(){
-        String logEmail=email.getText().toString().trim();
-        String logPass=pass.getText().toString().trim();
+        final String logEmail=email.getText().toString().trim();
+        final String logPass=pass.getText().toString().trim();
+        progressDialog.show();
         DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference().child("Users");
+
         dbRef.child(encodeString(logEmail)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if(dataSnapshot.exists()){
-                    String username= (String) dataSnapshot.child("username").getValue();
-                    String email=(String)dataSnapshot.child("email").getValue();
-                    String pass=(String)dataSnapshot.child("pass").getValue();
+                  //  String username= (String) dataSnapshot.child("username").getValue();
+                  //  String email=(String)dataSnapshot.child("email").getValue();
+                  //  String pass=(String)dataSnapshot.child("pass").getValue();
                    // String USER_KEY
-                    mAuth.signInWithEmailAndPassword(email,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    mAuth.signInWithEmailAndPassword(logEmail,logPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if(task.isSuccessful()){
+                                progressDialog.dismiss();
 
                                 Intent intent= new Intent(MainActivity.this,UserHomepage.class);
                                 startActivity(intent);
 
                             }
                             else {
+                                progressDialog.dismiss();
+                                email.setError("Invalid Email or Password!");
+                                email.requestFocus();
 
 
                             }
@@ -69,7 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }
                 else{
-
+                    progressDialog.dismiss();
                     email.setError("Invalid Email or Password!");
                     email.requestFocus();
                 }

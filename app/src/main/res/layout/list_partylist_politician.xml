@@ -18,15 +18,12 @@
         tools:layout_editor_absoluteY="80dp">
 
 
-
         <TextView
-            android:id="@+id/poliName"
+            android:id="@+id/memberName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/post_image"
-            android:layout_alignEnd="@+id/post_title_txtview"
-            android:layout_alignRight="@+id/post_title_txtview"
-            android:layout_marginBottom="19dp"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
             android:text="USER" />
     </RelativeLayout>
 

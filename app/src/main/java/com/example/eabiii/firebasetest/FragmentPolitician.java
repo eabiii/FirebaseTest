@@ -97,7 +97,7 @@ public class FragmentPolitician extends Fragment {
             protected void onBindViewHolder(PoliticianViewHolder holder, int position, PoliticianModel model) {
                 // model=pModel.get(position);
                 final String POST_KEY=getRef(position).getKey().toString();
-                
+
                 Log.d("Poli Name",POST_KEY);
                 holder.getTxtPoli().setText(model.getName());
                 holder.getTxtParty().setText(model.getPosition());

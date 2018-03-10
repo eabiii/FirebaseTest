@@ -55,13 +55,13 @@ public class AddPolitician extends AppCompatActivity {
                 addPolitician();
             }
         });
-        DatabaseReference dbGetParty= FirebaseDatabase.getInstance().getReference().child("PartyList");
-        dbGetParty.addValueEventListener(new ValueEventListener() {
+        DatabaseReference dbGetParty= FirebaseDatabase.getInstance().getReference();//.child("PartyList").child("partylist");
+        dbGetParty.child("PartyList").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
 
-                    String dbValue= String.valueOf(dataSnapshot1.getValue());
+                    String dbValue= String.valueOf(dataSnapshot1.child("partylist").getValue());
                     Log.d("Party",dbValue);
                     dbPartylist.add(dbValue);
 
@@ -125,12 +125,24 @@ public class AddPolitician extends AppCompatActivity {
                         }
                     });
 */
-                dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
-                dbRef.addValueEventListener(new ValueEventListener() {
+                FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
+                String uid=dbKey.getReference("PartyList").push().getKey();
+                final DatabaseReference dbParty=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist).child("members").child(uid);
+                final DatabaseReference addPost=dbParty.push();
+                    dbParty.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        Map newPost=new HashMap();
-                        newPost.put(pName,pName);
+                       Map newPost=new HashMap();
+                        newPost.put("name",pName);
+
+                        dbParty.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+                            }
+                        });
+                        /*
                         dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
@@ -138,6 +150,7 @@ public class AddPolitician extends AppCompatActivity {
                                 startActivity(new Intent(AddPolitician.this,UserHomepage.class));
                             }
                         });
+                        */
                     }
 
                     @Override

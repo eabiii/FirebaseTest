@@ -63,8 +63,9 @@ public class FragmentPartyList extends Fragment {
             }
         });
         */
+
+        String key=FirebaseDatabase.getInstance().getReference().child("PartyList").getKey();
         dbRef= FirebaseDatabase.getInstance().getReference().child("PartyList");
-        String key=FirebaseDatabase.getInstance().getReference().child("Politician").getKey();
         mAuth=FirebaseAuth.getInstance();
         txt=view.findViewById(R.id.txtName);
         post=view.findViewById(R.id.btnPost);
@@ -107,19 +108,22 @@ public class FragmentPartyList extends Fragment {
 
                 Log.d("Party Name",PARTY_KEY);
               //  holder.getTxtPoli().setText(model.getName());
-                holder.getTxtParty().setText(model.getName());
+                holder.getTxtParty().setText(model.getPartylist());
               //  holder.getTxtPos().setText(model.getPartylist());
                 //  Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+
+
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Log.d("Post Key",PARTY_KEY);
-                        Intent intent=new Intent(getActivity(),ViewPolitician.class);
+                        Intent intent=new Intent(getActivity(),ViewPartylistMember.class);
                         intent.putExtra("Party List",PARTY_KEY);
 
                         startActivity(intent);
                     }
                 });
+
             }
         };
         fAdapter.startListening();

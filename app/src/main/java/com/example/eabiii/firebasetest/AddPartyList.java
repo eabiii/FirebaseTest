@@ -60,7 +60,7 @@ public class AddPartyList extends AppCompatActivity {
         final String pPartylist=partylist.getText().toString().trim();
 
         if(checkIfPartylistExist(pPartylist)){
-
+          //  String key=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
             dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
 
             final DatabaseReference addPol=dbRef.push();
@@ -68,10 +68,10 @@ public class AddPartyList extends AppCompatActivity {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
 
-                  //  Map newPost=new HashMap();
+                   Map newPost=new HashMap();
                   //  newPost.put("name",pPartylist);
-                  //  newPost.put("partylist",pPartylist);
-                    dbRef.setValue(pPartylist).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    newPost.put("partylist",pPartylist);
+                    dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();

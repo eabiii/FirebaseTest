@@ -6,19 +6,19 @@ package com.example.eabiii.firebasetest;
 
 public class PartylistModel {
 
-    private String name;
+    private String partylist;
 
     public PartylistModel(){}
 
-    public PartylistModel(String name) {
-        this.name = name;
+    public PartylistModel(String partylist) {
+        this.partylist = partylist;
     }
 
-    public String getName() {
-        return name;
+    public String getPartylist() {
+        return partylist;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPartylist(String partylist) {
+        this.partylist = partylist;
     }
 }
