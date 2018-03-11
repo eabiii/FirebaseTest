@@ -57,7 +57,7 @@ public class RatePolitician extends AppCompatActivity {
             public void onClick(View view) {
                 FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
                 String uid=dbKey.getReference("Politician").push().getKey();
-                dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(poliName.getText().toString()).child("rating").child(uid);
+                dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(poliName.getText().toString()).child("ratings").child(uid);
 
                 String saveComment=comments.getText().toString().trim();
                 Map newPost=new HashMap();

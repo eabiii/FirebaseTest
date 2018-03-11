@@ -15,7 +15,7 @@
         android:layout_marginBottom="7dp"
         android:layout_marginEnd="9dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/commentView"
+        app:layout_constraintBottom_toTopOf="@+id/politicianView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:context="com.example.eabiii.firebasetest.ViewSinglePost">
@@ -47,7 +47,7 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/commentView"
+        android:id="@+id/politicianView"
         android:layout_width="367dp"
         android:layout_height="89dp"
         android:layout_marginEnd="8dp"
@@ -65,7 +65,7 @@
         android:layout_height="57dp"
         android:layout_marginLeft="16dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commentView">
+        app:layout_constraintTop_toBottomOf="@+id/politicianView">
 
         <EditText
             android:id="@+id/txtComment"
