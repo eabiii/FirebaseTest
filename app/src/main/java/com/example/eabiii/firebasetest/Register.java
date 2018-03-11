@@ -1,6 +1,7 @@
 package com.example.eabiii.firebasetest;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
@@ -164,6 +165,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 current_user_db.setValue(newPost);
 
                                 Toast.makeText(getApplicationContext(), "User Registered!", Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(Register.this,MainActivity.class));
                             } else {
 
                                 Toast.makeText(getApplicationContext(), "Error Registering User!", Toast.LENGTH_SHORT).show();

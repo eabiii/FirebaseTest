@@ -5,20 +5,9 @@
     android:id="@+id/singlePost"
     android:layout_width="match_parent"
     android:background="@drawable/background"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:layout_marginBottom="7dp"
-        android:layout_marginEnd="9dp"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/politicianView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:context="com.example.eabiii.firebasetest.ViewSinglePost">
+
 
         <ImageView
             android:id="@+id/singleImageview"
@@ -26,65 +15,70 @@
             android:layout_height="250dp"
             android:scaleType="centerCrop" />
 
-        <TextView
-            android:id="@+id/singleTitle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Post Title"
-            android:textColor="#100d0d"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+    <TextView
+        android:id="@+id/singleTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:text="Post Title"
+        android:textColor="#100d0d"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/singleImageview" />
 
-        <TextView
-            android:id="@+id/singleDesc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Post Description" />
+    <TextView
+        android:id="@+id/singleDesc"
+        android:layout_width="match_parent"
+        android:layout_height="29dp"
+        android:text="Post Description"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/singleTitle" />
 
-    </LinearLayout>
-
+    <TextView
+        android:id="@+id/txtComments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:text="Comments"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/singleDesc" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/politicianView"
-        android:layout_width="367dp"
-        android:layout_height="89dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginStart="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        android:layout_width="match_parent"
+        android:layout_height="109dp"
+        app:layout_constraintTop_toBottomOf="@+id/txtComments" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_width="287dp"
-        android:layout_height="57dp"
+        android:layout_width="243dp"
+        android:layout_height="62dp"
         android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/politicianView">
 
         <EditText
             android:id="@+id/txtComment"
-            android:layout_width="match_parent"
+            android:layout_width="225dp"
             android:layout_height="wrap_content"
             android:hint="Comment Something" />
     </android.support.design.widget.TextInputLayout>
 
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fabcomment"
         android:layout_width="94dp"
-        android:layout_height="50dp"
+        android:layout_height="59dp"
         android:layout_marginBottom="4dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="26dp"
         android:clickable="true"
         app:backgroundTint="@color/cardview_light_background"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textInputLayout"
         app:srcCompat="@drawable/sendimage" />
 

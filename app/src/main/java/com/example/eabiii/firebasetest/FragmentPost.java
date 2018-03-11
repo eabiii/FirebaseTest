@@ -87,6 +87,11 @@ public class FragmentPost extends Fragment {
     @Override
     public void onStart(){
         super.onStart();
+        if(mAuth.getCurrentUser()==null){
+
+            startActivity(new Intent(getActivity(),MainActivity.class));
+
+        }
 
         //mAuth.addAuthStateListener(mAuthListener);
         FirebaseRecyclerOptions<PostModel> options=new FirebaseRecyclerOptions.Builder<PostModel>()
@@ -106,7 +111,7 @@ public class FragmentPost extends Fragment {
                 final String POST_KEY=getRef(position).getKey().toString();
                 Log.d("Post Key",POST_KEY);
                 holder.getTxtTitle().setText(model.getTitle());
-                holder.getTxtDesc().setText(model.getDesc());
+                //holder.getTxtDesc().setText(model.getDesc());
                 holder.getTxtUser().setText(model.getUsername());
                 //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
                 Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
@@ -178,7 +183,7 @@ public class FragmentPost extends Fragment {
             super(itemView);
             v=itemView;
             txtTitle=itemView.findViewById(R.id.post_title_txtview);
-            txtDesc=itemView.findViewById(R.id.post_desc_txtview);
+          //  txtDesc=itemView.findViewById(R.id.post_desc_txtview);
             txtUser=itemView.findViewById(R.id.post_user);
             imgView=itemView.findViewById(R.id.post_image);
             Log.d("UID",txtUser.getText().toString());

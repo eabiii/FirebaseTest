@@ -83,7 +83,7 @@ public class FragmentProfile extends Fragment {
             }
         });
         loadInfo();
-        dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
+       // dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
 
         //recyclerview.setAdapter(fAdapter);
 
@@ -97,7 +97,7 @@ public class FragmentProfile extends Fragment {
       //  Log.d("USERCURRENT",UserHomepage.userName);
         //mAuth.addAuthStateListener(mAuthListener);
         options=new FirebaseRecyclerOptions.Builder<PostModel>()
-                .setQuery(dbFinalRef,PostModel.class).build();
+                .setQuery(dbRef,PostModel.class).build();
         fAdapter=new FirebaseRecyclerAdapter<PostModel,FragmentPost.PostHolder>(options) {
 
             @Override
@@ -191,7 +191,7 @@ public class FragmentProfile extends Fragment {
             super(itemView);
             v=itemView;
             txtTitle=itemView.findViewById(R.id.post_title_txtview);
-            txtDesc=itemView.findViewById(R.id.post_desc_txtview);
+          //  txtDesc=itemView.findViewById(R.id.post_desc_txtview);
             txtUser=itemView.findViewById(R.id.post_user);
             imgView=itemView.findViewById(R.id.post_image);
             Log.d("UID",txtUser.getText().toString());

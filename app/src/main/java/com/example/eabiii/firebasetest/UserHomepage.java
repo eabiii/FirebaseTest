@@ -48,7 +48,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
 
     private ArrayList<PostModel>pModel=new ArrayList<>();
 
-    private TextView txt,mTextMessage,txtName;
+    private TextView txt,txtBirth,txtName;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
@@ -66,6 +66,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
       //  fragmentStatePagerAdapter=new FragmentAdapter(getSupportFragmentManager());
        // viewPager=findViewById(R.id.viewPager);
         txtName=findViewById(R.id.name_Text);
+        txtBirth=findViewById(R.id.birthday_Text);
         BottomNavigationView btmNav=findViewById(R.id.navigation);
         btmNav.setOnNavigationItemSelectedListener(this);
         /*
@@ -131,50 +132,18 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
 
 
     }
-
-/*
+    @Override
     protected void onStart(){
         super.onStart();
+        if(mAuth.getCurrentUser()==null){
+            finish();
+            startActivity(new Intent(this,MainActivity.class));
 
-        //mAuth.addAuthStateListener(mAuthListener);
-        FirebaseRecyclerOptions<PostModel>options=new FirebaseRecyclerOptions.Builder<PostModel>()
-                .setQuery(dbRef,PostModel.class).build();
-        FirebaseRecyclerAdapter fAdapter=new FirebaseRecyclerAdapter<PostModel,PostHolder>(options) {
-
-            @Override
-            public PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-               View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_post,parent,false);
-
-                return new PostHolder(view);
-            }
-
-            @Override
-            protected void onBindViewHolder( PostHolder holder, int position,  PostModel model) {
-               // model=pModel.get(position);
-                final String POST_KEY=getRef(position).getKey().toString();
-                Log.d("Post Key",POST_KEY);
-                holder.getTxtTitle().setText(model.getTitle());
-                holder.getTxtDesc().setText(model.getDesc());
-                holder.getTxtUser().setText(model.getUsername());
-                //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
-                Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
-                holder.v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.d("Post Key",POST_KEY);
-                        Intent intent=new Intent(UserHomepage.this,ViewSinglePost.class);
-                        intent.putExtra("Post ID",POST_KEY);
-                        startActivity(intent);
-                    }
-                });
-            }
-        };
-        fAdapter.startListening();
-        recyclerview.setAdapter(fAdapter);
+        }
 
     }
 
-*/
+
 
     private void setupViewPager(ViewPager viewPager){
         FragmentAdapter adapter=new FragmentAdapter(getSupportFragmentManager());
@@ -223,6 +192,22 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
 
             }
         });
+        dataRef=db.getReference("Users").child(encodeString(user_id)).child("birthday");
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                //fullName=String.valueOf(dataSnapshot.getValue());
+                txtBirth.setText(String.valueOf(dataSnapshot.getValue()));
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
 
 
 
@@ -276,7 +261,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
             super(itemView);
             v=itemView;
             txtTitle=itemView.findViewById(R.id.post_title_txtview);
-            txtDesc=itemView.findViewById(R.id.post_desc_txtview);
+          //  txtDesc=itemView.findViewById(R.id.post_desc_txtview);
             txtUser=itemView.findViewById(R.id.post_user);
             imgView=itemView.findViewById(R.id.post_image);
             Log.d("UID",txtUser.getText().toString());
