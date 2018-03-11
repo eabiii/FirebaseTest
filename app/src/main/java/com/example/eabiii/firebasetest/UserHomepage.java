@@ -68,6 +68,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
         txtName=findViewById(R.id.name_Text);
         BottomNavigationView btmNav=findViewById(R.id.navigation);
         btmNav.setOnNavigationItemSelectedListener(this);
+        /*
         testing=findViewById(R.id.btnTestAdd);
         testing.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -76,6 +77,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
                 startActivity(intent);
             }
         });
+        */
         mAuth=FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
         loadInfo();
