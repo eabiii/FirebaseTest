@@ -49,11 +49,13 @@
             android:textSize="18sp"
             android:textStyle="bold" />
 
+
         <TextView
             android:id="@+id/email_Text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="E-mail"
+            android:visibility="invisible"
             android:textSize="18sp" />
 
         <EditText
@@ -70,6 +72,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Password"
+            android:visibility="invisible"
+
             android:textSize="18sp"
             android:textStyle="normal" />
 
@@ -85,11 +89,12 @@
 
     <Button
         android:id="@+id/login_Btn"
+        android:background="@drawable/rounded_corner_button"
         android:layout_width="237dp"
         android:layout_height="38dp"
         android:layout_marginBottom="8dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="#000000"
+        android:backgroundTint="#64534a"
         android:text="LOGIN"
         android:textColor="#ffffff"
         app:layout_constraintBottom_toBottomOf="parent"

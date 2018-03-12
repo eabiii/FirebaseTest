@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -52,6 +53,7 @@ public class FragmentPartyList extends Fragment {
         View view=inflater.inflate(R.layout.fragment_partylist,container,false);
         recyclerview=view.findViewById(R.id.partyView);
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerview.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
         //pAdapter=new PostAdapter(pModel);
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
@@ -128,6 +130,7 @@ public class FragmentPartyList extends Fragment {
         };
         fAdapter.startListening();
         recyclerview.setAdapter(fAdapter);
+
     }
 
 

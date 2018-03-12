@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -60,6 +61,8 @@ public class ViewPolitician extends AppCompatActivity {
         rvPolitician=findViewById(R.id.politicianView);
         rvPolitician.setLayoutManager(new LinearLayoutManager(this));
         rvPolitician.setItemAnimator(new DefaultItemAnimator());
+        rvPolitician.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
+
         rateBar=findViewById(R.id.ratingBar);
 
         dbRef.child(POLI_KEY).addValueEventListener(new ValueEventListener() {

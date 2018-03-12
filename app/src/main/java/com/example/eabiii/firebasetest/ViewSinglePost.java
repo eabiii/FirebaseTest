@@ -7,6 +7,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -67,6 +68,7 @@ public class ViewSinglePost extends AppCompatActivity {
         rvComment=findViewById(R.id.politicianView);
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setItemAnimator(new DefaultItemAnimator());
+        rvComment.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         POST_KEY=getIntent().getExtras().get("Post ID").toString();
         mAuth=FirebaseAuth.getInstance();

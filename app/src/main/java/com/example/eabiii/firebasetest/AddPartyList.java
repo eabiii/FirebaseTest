@@ -29,7 +29,7 @@ import java.util.Map;
 public class AddPartyList extends AppCompatActivity {
 
     private EditText partylist;
-    private Button add;
+    private Button add,cancel;
     FirebaseDatabase db;
     DatabaseReference dbRef;
     FirebaseAuth mAuth;
@@ -48,6 +48,13 @@ public class AddPartyList extends AppCompatActivity {
             public void onClick(View view) {
                 Log.d("CLICK ME","CLICK");
                 addPartylist();
+            }
+        });
+        cancel=findViewById(R.id.btnCancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AddPartyList.this,UserHomepage.class));
             }
         });
 

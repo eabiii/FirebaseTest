@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="13dp"
         android:layout_marginTop="56dp"
-        android:text="Politician Name"
+        android:text="Party List Name"
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/editName"
         app:layout_constraintHorizontal_bias="0.502"

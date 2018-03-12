@@ -26,7 +26,8 @@
         <activity android:name=".RatePolitician" />
         <activity android:name=".AddPartyList" />
         <activity android:name=".AddPolitician" />
-        <activity android:name=".ViewPartylistMember"></activity>
+        <activity android:name=".ViewPartylistMember" />
+        <activity android:name=".Settings"></activity>
     </application>
 
 </manifest>
