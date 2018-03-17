@@ -49,7 +49,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
     private ArrayList<PostModel>pModel=new ArrayList<>();
 
     private TextView txt,txtBirth,txtName;
-    private Button post,logout,addPol;
+    private Button settings,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
 
@@ -79,6 +79,13 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
             }
         });
         */
+        settings=findViewById(R.id.btnSettings);
+        settings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(UserHomepage.this,Settings.class));
+            }
+        });
         mAuth=FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
         loadInfo();

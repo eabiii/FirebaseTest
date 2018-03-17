@@ -10,4 +10,10 @@
     <string name="title_candidates">Candidates</string>
     <string name="title_partylist">Party List</string>
     <string name="title_register"><u>Sign Up for Rotten Politics</u></string>
+    <string name="title_activity_user_navigate">UserNavigate</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
 </resources>

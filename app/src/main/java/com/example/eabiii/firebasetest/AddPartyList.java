@@ -50,7 +50,7 @@ public class AddPartyList extends AppCompatActivity {
                 addPartylist();
             }
         });
-        cancel=findViewById(R.id.btnCancel);
+        cancel=findViewById(R.id.btnBack);
         cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

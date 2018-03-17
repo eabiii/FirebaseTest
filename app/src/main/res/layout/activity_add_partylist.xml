@@ -30,6 +30,9 @@
         android:layout_marginBottom="220dp"
         android:layout_marginStart="56dp"
         android:text="SUBMIT"
+        android:backgroundTint="#50000000"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -41,6 +44,9 @@
         android:layout_marginEnd="42dp"
         android:layout_marginStart="39dp"
         android:text="CANCEL"
+        android:backgroundTint="#50000000"
+        android:textColor="#ffffff"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"

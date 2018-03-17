@@ -6,13 +6,23 @@ package com.example.eabiii.firebasetest;
 
 public class PartyListMemberModel {
 
-    private String name;
+    private String name, position;
 
 
     public PartyListMemberModel(){}
 
-    public PartyListMemberModel(String name) {
+    public PartyListMemberModel(String name, String position) {
+
         this.name = name;
+        this.position=position;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getName() {

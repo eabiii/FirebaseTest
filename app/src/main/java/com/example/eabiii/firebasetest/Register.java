@@ -1,6 +1,7 @@
 package com.example.eabiii.firebasetest;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -35,6 +36,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     EditText emailAdd,password,confirmPassword,username,firstName,lastName;
     Button birthDate;
     DatePickerDialog.OnDateSetListener dateSetListener;
+    ProgressDialog progressDialog;
    // String user_id;
     int b=0;
 
@@ -45,6 +47,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        progressDialog=new ProgressDialog(Register.this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setTitle("Registering User");
         emailAdd=(EditText)findViewById(R.id.email_Edit);
         password=(EditText)findViewById(R.id.pw_Edit);
         confirmPassword=(EditText)findViewById(R.id.pw2_Edit);
@@ -138,7 +143,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-
+                progressDialog.show();
                 if(!dataSnapshot.exists()){
                     mAuth.createUserWithEmailAndPassword(email, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                         @Override
@@ -163,11 +168,11 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                                 newPost.put("full_name",fullName);
                                 newPost.put("birthday",birth);
                                 current_user_db.setValue(newPost);
-
+                                progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "User Registered!", Toast.LENGTH_SHORT).show();
                                 startActivity(new Intent(Register.this,MainActivity.class));
                             } else {
-
+                                progressDialog.dismiss();
                                 Toast.makeText(getApplicationContext(), "Error Registering User!", Toast.LENGTH_SHORT).show();
 
                             }
@@ -178,7 +183,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
                 }
 
                 else{
-
+                    progressDialog.dismiss();
                     username.setError("Username already Exists!");
                     username.requestFocus();
                     return;

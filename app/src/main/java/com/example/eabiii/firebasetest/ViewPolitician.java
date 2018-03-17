@@ -125,7 +125,7 @@ public class ViewPolitician extends AppCompatActivity {
                 Log.d("TEST!","TEST123");
                 holder.getTxtUsername().setText(model.getUsername());
                 holder.getTxtComment().setText(model.getComment());
-                holder.getTxtRating().setText(Float.toString(model.getRating()));
+                holder.getTxtRating().setText("User Rating: "+Float.toString(model.getRating()));
             }
         };
         fAdapter.startListening();

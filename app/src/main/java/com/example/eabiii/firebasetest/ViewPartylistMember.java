@@ -42,6 +42,7 @@ public class ViewPartylistMember extends AppCompatActivity {
         setContentView(R.layout.activity_view_partylist_member);
         txtpParty=findViewById(R.id.memberName);
         POLI_KEY=getIntent().getExtras().get("Party List").toString();
+        txtpParty.setText(POLI_KEY);
         Log.d("key",POLI_KEY);
         rvPartyList=findViewById(R.id.memberView);
         rvPartyList.setLayoutManager(new LinearLayoutManager(this));
@@ -74,7 +75,7 @@ public class ViewPartylistMember extends AppCompatActivity {
             protected void onBindViewHolder( PartyListMemberViewHolder holder, int position,  PartyListMemberModel model) {
                 Log.d("TEST!","TEST123");
                 // holder.getTxtUser().setText(model.getUsername());
-                // holder.getTxtComment().setText(model.getComment());
+                 holder.getTxtPosition().setText(model.getPosition().toString());
                 holder.getTxtParty().setText(model.getName().toString());
                // holder.setComment(model.getComment().toString());
 

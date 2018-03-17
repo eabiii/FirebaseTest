@@ -63,6 +63,12 @@
             android:layout_height="wrap_content"
             android:text="February 14, 1998"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/btnSettings"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/settings" />
     </LinearLayout>
 
 <RelativeLayout

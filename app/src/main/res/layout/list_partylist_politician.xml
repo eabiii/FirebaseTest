@@ -42,6 +42,15 @@
             tools:layout_editor_absoluteX="143dp"
             tools:layout_editor_absoluteY="25dp" />
 
+        <TextView
+            android:id="@+id/memberPosition"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/memberName"
+            android:layout_alignStart="@+id/memberName"
+            android:layout_centerVertical="true"
+            android:text="TextView" />
+
 
     </RelativeLayout>
 

@@ -53,10 +53,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void login(){
+
         final String logEmail=email.getText().toString().trim();
         final String logPass=pass.getText().toString().trim();
+        if(logEmail.isEmpty()){
+
+            email.setError("Email is required");
+            email.requestFocus();
+            return;
+        }
+        if(logPass.isEmpty()){
+
+            pass.setError("Password is required");
+            pass.requestFocus();
+            return;
+        }
         progressDialog.show();
         DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference().child("Users");
+
 
         dbRef.child(encodeString(logEmail)).addValueEventListener(new ValueEventListener() {
             @Override

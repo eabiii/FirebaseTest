@@ -11,12 +11,21 @@ import android.widget.TextView;
 public class PartyListMemberViewHolder extends RecyclerView.ViewHolder {
 
 
-    TextView txtParty;
+    TextView txtParty,txtPosition;
     View mView;
     public PartyListMemberViewHolder(View itemView) {
         super(itemView);
         this.txtParty=itemView.findViewById(R.id.memberName);
+        this.txtPosition=itemView.findViewById(R.id.memberPosition);
         this.mView=itemView;
+    }
+
+    public TextView getTxtPosition() {
+        return txtPosition;
+    }
+
+    public void setTxtPosition(TextView txtPosition) {
+        this.txtPosition = txtPosition;
     }
 
     public TextView getTxtParty() {
