@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -57,6 +58,7 @@ public class PostActivity extends AppCompatActivity {
         mCurrentUser=mAuth.getCurrentUser();
         dbUser=FirebaseDatabase.getInstance().getReference().child("Users").child(encodeString(mCurrentUser.getEmail()));
         loadInfo();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -112,6 +114,7 @@ public class PostActivity extends AppCompatActivity {
                                     addPost.child("title").setValue(dbTitle);
                                     addPost.child("desc").setValue(dbDesc);
                                     addPost.child("image").setValue(image);
+                                    addPost.child("time").setValue(ServerValue.TIMESTAMP);
                                     addPost.child("username").setValue(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {

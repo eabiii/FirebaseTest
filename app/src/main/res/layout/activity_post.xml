@@ -46,15 +46,17 @@
             android:textColor="@color/common_google_signin_btn_text_dark_focused" />
 
         <Button
-            android:layout_marginTop="30dp"
             android:id="@+id/btnPost"
-            android:textColor="#fff"
-            android:textStyle="bold"
-            android:layout_marginRight="5dp"
+            android:layout_width="349dp"
+
+            android:layout_height="match_parent"
             android:layout_marginLeft="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Post"/>
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#50000000"
+            android:text="Post"
+            android:textColor="#ffffff"
+            android:textStyle="bold" />
 
     </LinearLayout>
 </ScrollView>

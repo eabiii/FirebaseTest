@@ -1,7 +1,11 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.BottomNavigationView;
 import android.support.design.widget.FloatingActionButton;
@@ -29,7 +33,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by eabiii on 06/03/2018.
@@ -47,7 +53,7 @@ public class FragmentPost extends Fragment {
     private FloatingActionButton fab;
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
-    private TextView txt,mTextMessage,txtName;
+    private TextView txt,mTextMessage,txtName,empty;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
@@ -63,6 +69,7 @@ public class FragmentPost extends Fragment {
         //pAdapter=new PostAdapter(pModel);
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
+        empty=view.findViewById(R.id.internet_connect);
 
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         String key=FirebaseDatabase.getInstance().getReference().child("Post").getKey();
@@ -75,14 +82,37 @@ public class FragmentPost extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),PostActivity.class));
+                if(isConnected()) {
+
+                    startActivity(new Intent(getActivity(),PostActivity.class));                }
+                else{
+
+                    AlertDialog alertDialog=new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.setTitle("Internet Connection");
+                    alertDialog.setMessage("Please connect to the internet to access the content");
+                    alertDialog.setButton(getActivity().getApplicationContext().getString(R.string.ok),new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                }
+
+
             }
         });
 
         loadInfo();
+        if (!isConnected()) {
+            empty.setVisibility(View.VISIBLE);
+        }
+        LinearLayoutManager lm=new LinearLayoutManager(getActivity());
+        lm.setStackFromEnd(true);
+        lm.setReverseLayout(true);
+        recyclerview.setLayoutManager(lm);
 
-        //BottomNavigationView navigation = (BottomNavigationView) view.findViewById(R.id.navigation);
-        //navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         return view;
     }
 
@@ -91,7 +121,8 @@ public class FragmentPost extends Fragment {
         super.onStart();
         if(mAuth.getCurrentUser()==null){
 
-            startActivity(new Intent(getActivity(),MainActivity.class));
+                startActivity(new Intent(getActivity(), MainActivity.class));
+
 
         }
 
@@ -110,26 +141,36 @@ public class FragmentPost extends Fragment {
             @Override
             protected void onBindViewHolder( PostHolder holder, int position,  PostModel model) {
                 // model=pModel.get(position);
-                final String POST_KEY=getRef(position).getKey().toString();
-                Log.d("Post Key",POST_KEY);
-                holder.getTxtTitle().setText(model.getTitle());
-                //holder.getTxtDesc().setText(model.getDesc());
-                holder.getTxtUser().setText(model.getUsername());
-                //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
-                Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
-                holder.v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.d("Post Key",POST_KEY);
-                        Intent intent=new Intent(getActivity(),ViewSinglePost.class);
-                        intent.putExtra("Post ID",POST_KEY);
-                        startActivity(intent);
-                    }
-                });
+                if (!isConnected()) {
+                    empty.setVisibility(View.VISIBLE);
+                    return;
+                }
+                else {
+                    final String POST_KEY = getRef(position).getKey().toString();
+                    Log.d("Post Key", POST_KEY);
+                    holder.getTxtTitle().setText(model.getTitle());
+                    //holder.getTxtDesc().setText(model.getDesc());
+                    holder.getTxtUser().setText(model.getUsername());
+                    holder.setTxtTime(model.getTime());
+
+                    //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
+                    Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                    holder.v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.d("Post Key", POST_KEY);
+                            Intent intent = new Intent(getActivity(), ViewSinglePost.class);
+                            intent.putExtra("Post ID", POST_KEY);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
         };
-        fAdapter.startListening();
-        recyclerview.setAdapter(fAdapter);
+        if(isConnected()) {
+            fAdapter.startListening();
+            recyclerview.setAdapter(fAdapter);
+        }
 
     }
 
@@ -170,6 +211,21 @@ public class FragmentPost extends Fragment {
 
 
     }
+    private boolean isConnected(){
+        if(getActivity()!=null){
+            ConnectivityManager connectivityManager=(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+            if(networkInfo !=null && networkInfo.isConnected()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return false;
+
+    }
 
     private String encodeString(String s){
 
@@ -179,7 +235,7 @@ public class FragmentPost extends Fragment {
     public static class PostHolder extends RecyclerView.ViewHolder{
 
         View v;
-        TextView txtTitle,txtDesc,txtUser;
+        TextView txtTitle,txtDesc,txtUser,txtTime;
         ImageView imgView;
         public PostHolder(View itemView) {
             super(itemView);
@@ -187,9 +243,23 @@ public class FragmentPost extends Fragment {
             txtTitle=itemView.findViewById(R.id.post_title_txtview);
           //  txtDesc=itemView.findViewById(R.id.post_desc_txtview);
             txtUser=itemView.findViewById(R.id.post_user);
+            txtTime=itemView.findViewById(R.id.txtTime);
             imgView=itemView.findViewById(R.id.post_image);
             Log.d("UID",txtUser.getText().toString());
 
+        }
+
+        public TextView getTxtTime() {
+            return txtTime;
+        }
+
+        public void setTxtTime(Long txttime) {
+            SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            try{
+                txtTime.setText(format.format(new Date(txttime)));
+            } catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
         public void setTitle(String title) {

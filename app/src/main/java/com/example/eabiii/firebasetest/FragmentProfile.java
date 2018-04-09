@@ -32,7 +32,10 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by eabiii on 06/03/2018.
@@ -49,7 +52,7 @@ public class FragmentProfile extends Fragment {
     Query dbFinalRef;
     private String userName;
     private String fullName;
-
+    Query query;
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
     private TextView txt,mTextMessage,txtName;
@@ -85,53 +88,66 @@ public class FragmentProfile extends Fragment {
             }
         });
         loadInfo();
+        LinearLayoutManager lm=new LinearLayoutManager(getActivity());
+        lm.setStackFromEnd(true);
+        lm.setReverseLayout(true);
+        recyclerview.setLayoutManager(lm);
        // dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
 
         //recyclerview.setAdapter(fAdapter);
+
 
         return view;
     }
 
     @Override
     public void onStart(){
-        super.onStart();
 
+        super.onStart();
+     //   query=dbRef.orderByChild("username").equalTo(userName);
       //  Log.d("USERCURRENT",UserHomepage.userName);
         //mAuth.addAuthStateListener(mAuthListener);
+
         options=new FirebaseRecyclerOptions.Builder<PostModel>()
                 .setQuery(dbRef,PostModel.class).build();
-        fAdapter=new FirebaseRecyclerAdapter<PostModel,FragmentPost.PostHolder>(options) {
+        fAdapter=new FirebaseRecyclerAdapter<PostModel,PostHolder>(options) {
 
             @Override
-            public FragmentPost.PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            public PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
                 View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_profile,parent,false);
 
-                return new FragmentPost.PostHolder(view);
+                return new PostHolder(view);
             }
 
             @Override
-            protected void onBindViewHolder(FragmentPost.PostHolder holder, int position, PostModel model) {
+            protected void onBindViewHolder(PostHolder holder, int position, PostModel model) {
                 // model=pModel.get(position);
-                final String POST_KEY=getRef(position).getKey().toString();
-                Log.d("Post Key",POST_KEY);
-                holder.getTxtTitle().setText(model.getTitle());
+                if (model.getUsername().equalsIgnoreCase(userName)) {
+                    final String POST_KEY = getRef(position).getKey().toString();
+                    Log.d("Post Key", POST_KEY);
+                    holder.getTxtTitle().setText(model.getTitle());
+                    Log.d("TITLES", model.getTitle());
 //                holder.getTxtDesc().setText(model.getDesc());
-                holder.getTxtUser().setText(model.getUsername());
-                //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
-                Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
-                holder.v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Log.d("Post Key",POST_KEY);
-                        Intent intent=new Intent(getActivity(),ViewSinglePost.class);
-                        intent.putExtra("Post ID",POST_KEY);
-                        startActivity(intent);
-                    }
-                });
+                    holder.getTxtUser().setText(model.getUsername());
+                    holder.setTxtTime(model.getTime());
+                    //Log.d("TIMESS",.toString(model.getTimestamp()));
+                    //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
+                    Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                    holder.v.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Log.d("Post Key", POST_KEY);
+                            Intent intent = new Intent(getActivity(), ViewSinglePost.class);
+                            intent.putExtra("Post ID", POST_KEY);
+                            startActivity(intent);
+                        }
+                    });
+                }
             }
         };
         recyclerview.setAdapter(fAdapter);
         fAdapter.startListening();
+
 
 
     }
@@ -187,7 +203,7 @@ public class FragmentProfile extends Fragment {
     public static class PostHolder extends RecyclerView.ViewHolder{
 
         View v;
-        TextView txtTitle,txtDesc,txtUser;
+        TextView txtTitle,txtDesc,txtUser,txtTime;
         ImageView imgView;
         public PostHolder(View itemView) {
             super(itemView);
@@ -196,8 +212,22 @@ public class FragmentProfile extends Fragment {
           //  txtDesc=itemView.findViewById(R.id.post_desc_txtview);
             txtUser=itemView.findViewById(R.id.post_user);
             imgView=itemView.findViewById(R.id.post_image);
+            txtTime=itemView.findViewById(R.id.txtTime);
             Log.d("UID",txtUser.getText().toString());
 
+        }
+
+        public TextView getTxtTime() {
+            return txtTime;
+        }
+
+        public void setTxtTime(Long txttime) {
+            SimpleDateFormat format=new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+            try{
+                txtTime.setText(format.format(new Date(txttime)));
+            } catch(Exception e){
+                e.printStackTrace();
+            }
         }
 
         public void setTitle(String title) {

@@ -62,7 +62,10 @@ public class ViewPolitician extends AppCompatActivity {
         rvPolitician.setLayoutManager(new LinearLayoutManager(this));
         rvPolitician.setItemAnimator(new DefaultItemAnimator());
         rvPolitician.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
-
+        LinearLayoutManager lm=new LinearLayoutManager(this);
+        lm.setStackFromEnd(true);
+        lm.setReverseLayout(true);
+        rvPolitician.setLayoutManager(lm);
         rateBar=findViewById(R.id.ratingBar);
 
         dbRef.child(POLI_KEY).addValueEventListener(new ValueEventListener() {
@@ -126,6 +129,8 @@ public class ViewPolitician extends AppCompatActivity {
                 holder.getTxtUsername().setText(model.getUsername());
                 holder.getTxtComment().setText(model.getComment());
                 holder.getTxtRating().setText("User Rating: "+Float.toString(model.getRating()));
+                holder.setTxtTime(model.getTime());
+
             }
         };
         fAdapter.startListening();

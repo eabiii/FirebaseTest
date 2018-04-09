@@ -3,6 +3,7 @@
     package="com.example.eabiii.firebasetest">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -21,13 +22,13 @@
         <activity android:name=".MainActivity"></activity>
         <activity android:name=".Register" />
         <activity android:name=".UserHomepage" />
-        <activity android:name=".PostActivity" />
-        <activity android:name=".ViewSinglePost" />
-        <activity android:name=".ViewPolitician" />
+        <activity android:name=".PostActivity" android:parentActivityName=".UserHomepage"/>
+        <activity android:name=".ViewSinglePost" android:parentActivityName=".UserHomepage" />
+        <activity android:name=".ViewPolitician" android:parentActivityName=".UserHomepage"/>
         <activity android:name=".RatePolitician" />
-        <activity android:name=".AddPartyList" />
-        <activity android:name=".AddPolitician" />
-        <activity android:name=".ViewPartylistMember" />
+        <activity android:name=".AddPartyList" android:parentActivityName=".UserHomepage"/>
+        <activity android:name=".AddPolitician" android:parentActivityName=".UserHomepage"/>
+        <activity android:name=".ViewPartylistMember" android:parentActivityName=".UserHomepage"/>
         <activity android:name=".Settings" />
         <activity android:name=".ChangePassword"></activity>
     </application>

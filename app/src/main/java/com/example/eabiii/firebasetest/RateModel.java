@@ -8,14 +8,24 @@ public class RateModel {
 
     private String username,comment;
     private float rating;
+    private Long time;
 
     public RateModel() {
     }
 
-    public RateModel(String username, String comment, float rating) {
+    public RateModel(String username, String comment, float rating, Long time) {
         this.username = username;
         this.comment = comment;
         this.rating = rating;
+        this.time=time;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
     }
 
     public String getUsername() {

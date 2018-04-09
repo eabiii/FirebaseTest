@@ -20,6 +20,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class RatePolitician extends AppCompatActivity {
     private RatingBar ratingBar;
     private TextView poliName,poliposition,polipartylist;
     private EditText comments;
-    private Button rate;
+    private Button rate,back;
     FirebaseDatabase db;
     DatabaseReference dbRef;
     DatabaseReference dbUser;
@@ -52,6 +53,7 @@ public class RatePolitician extends AppCompatActivity {
         polipartylist=findViewById(R.id.partyList_Text);
         rate=findViewById(R.id.btnRate);
         comments=findViewById(R.id.editComment);
+
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -64,6 +66,7 @@ public class RatePolitician extends AppCompatActivity {
                 newPost.put("username",username);
                 newPost.put("comment",saveComment);
                 newPost.put("rating",ratingNumber);
+                newPost.put("time", ServerValue.TIMESTAMP);
                 dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
@@ -106,6 +109,15 @@ public class RatePolitician extends AppCompatActivity {
             }
         });
 
+        back=findViewById(R.id.btnBack);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(RatePolitician.this,ViewPolitician.class);
+                intent.putExtra("Poli Name", POLI_INFO_KEY);
+                startActivity(intent);
+            }
+        });
 
 
         setupFirebase();

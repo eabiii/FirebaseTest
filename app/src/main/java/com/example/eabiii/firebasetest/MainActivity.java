@@ -1,7 +1,10 @@
 package com.example.eabiii.firebasetest;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -43,8 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
         progressDialog=new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Loading...");
-        progressDialog.setTitle("Fetching Data");
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setTitle("Logging In");
     }
 
     private String encodeString(String s){
@@ -52,90 +55,86 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return s.replace(".", ",");
     }
 
-    private void login(){
+    private void login() {
 
-        final String logEmail=email.getText().toString().trim();
-        final String logPass=pass.getText().toString().trim();
-        if(logEmail.isEmpty()){
+        if (isConnected()) {
+            final String logEmail = email.getText().toString().trim();
+            final String logPass = pass.getText().toString().trim();
+            if (logEmail.isEmpty()) {
 
-            email.setError("Email is required");
+                email.setError("Email is required");
+                email.requestFocus();
+                return;
+            }
+            if (logPass.isEmpty()) {
+
+                pass.setError("Password is required");
+                pass.requestFocus();
+                return;
+            }
+            progressDialog.show();
+            DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference().child("Users");
+
+
+            dbRef.child(encodeString(logEmail)).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        //  String username= (String) dataSnapshot.child("username").getValue();
+                        //  String email=(String)dataSnapshot.child("email").getValue();
+                        //  String pass=(String)dataSnapshot.child("pass").getValue();
+                        // String USER_KEY
+                        mAuth.signInWithEmailAndPassword(logEmail, logPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    progressDialog.dismiss();
+
+                                    Intent intent = new Intent(MainActivity.this, UserHomepage.class);
+                                    startActivity(intent);
+                                    finish();
+
+                                } else {
+                                    progressDialog.dismiss();
+                                    email.setError("Invalid Email or Password!");
+                                    email.requestFocus();
+
+
+                                }
+
+                            }
+                        });
+
+                    } else {
+                        progressDialog.dismiss();
+                        email.setError("Invalid Email or Password!");
+                        email.requestFocus();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
+        else{
+            email.setError("Please make sure you are connected to the internet.");
             email.requestFocus();
-            return;
-        }
-        if(logPass.isEmpty()){
 
-            pass.setError("Password is required");
-            pass.requestFocus();
-            return;
-        }
-        progressDialog.show();
-        DatabaseReference dbRef= FirebaseDatabase.getInstance().getReference().child("Users");
-
-
-        dbRef.child(encodeString(logEmail)).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-                  //  String username= (String) dataSnapshot.child("username").getValue();
-                  //  String email=(String)dataSnapshot.child("email").getValue();
-                  //  String pass=(String)dataSnapshot.child("pass").getValue();
-                   // String USER_KEY
-                    mAuth.signInWithEmailAndPassword(logEmail,logPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if(task.isSuccessful()){
-                                progressDialog.dismiss();
-
-                                Intent intent= new Intent(MainActivity.this,UserHomepage.class);
-                                startActivity(intent);
-
-                            }
-                            else {
-                                progressDialog.dismiss();
-                                email.setError("Invalid Email or Password!");
-                                email.requestFocus();
-
-
-                            }
-
-                        }
-                    });
-
-                }
-                else{
-                    progressDialog.dismiss();
-                    email.setError("Invalid Email or Password!");
-                    email.requestFocus();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-
-
-
-/*
-    mAuth.signInWithEmailAndPassword(logEmail,logPass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            if(task.isSuccessful()){
-
-                Intent intent= new Intent(MainActivity.this,UserHomepage.class);
-                startActivity(intent);
-
-            }
-            else {
-
-
-            }
 
         }
-    });
-    */
+    }
+
+    private boolean isConnected(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override

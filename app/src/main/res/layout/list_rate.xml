@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    tools:layout_editor_absoluteY="81dp">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -59,6 +61,20 @@
             android:textSize="14sp"
             tools:layout_editor_absoluteX="143dp"
             tools:layout_editor_absoluteY="90dp" />
+
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="154dp"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/comment"
+            android:layout_alignStart="@+id/comment"
+            android:layout_below="@+id/comment"
+            android:text="Time"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="75dp" />
+
     </RelativeLayout>
 
     <!--

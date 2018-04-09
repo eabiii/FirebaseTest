@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,6 +19,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toolbar;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
@@ -27,6 +29,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
@@ -72,19 +75,6 @@ public class ViewSinglePost extends AppCompatActivity {
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         POST_KEY=getIntent().getExtras().get("Post ID").toString();
         mAuth=FirebaseAuth.getInstance();
-     //   addComment=findViewById(R.id.btnRate);
-
-        /*
-        editComment.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View view, boolean b) {
-                if(b){
-                    editComment.setSelection(editComment.getText().length());
-
-                }
-            }
-        });
-        */
         dbRef.child(POST_KEY).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -120,8 +110,9 @@ public class ViewSinglePost extends AppCompatActivity {
                     });
                 }
                 editComment.setBackgroundResource(android.R.drawable.editbox_background_normal);
+                editComment.requestFocus();
                 InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editComment,InputMethodManager.SHOW_FORCED);
+                imm.showSoftInput(editComment,InputMethodManager.SHOW_IMPLICIT);
             }
         });
 
@@ -130,41 +121,30 @@ public class ViewSinglePost extends AppCompatActivity {
             public void onClick(View view) {
                 userComment=editComment.getText().toString();
                 if(validate()){
-
+                    FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
+                    String uid=dbKey.getReference("Post").push().getKey();
                     dbSave=FirebaseDatabase.getInstance().getReference().child("Post").child(POST_KEY);
-                    DatabaseReference dbfinal=dbSave.child("comments").child(username);
+                    DatabaseReference dbfinal=dbSave.child("comments").child(uid);
 //                    String saveComment=editComment.getText().toString().trim();
                     Map save=new HashMap();
                     save.put("username",username);
                     save.put("comment",userComment);
+                    save.put("time", ServerValue.TIMESTAMP);
                     dbfinal.setValue(save);
                     fAdapter.notifyDataSetChanged();
+                    editComment.setText("");
 
 
                 }
             }
         });
-        /*
-        addComment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                    if(validate()){
 
-                    dbSave=FirebaseDatabase.getInstance().getReference().child("Post").child(POST_KEY);
-                    DatabaseReference dbfinal=dbSave.child("comments").child(username);
-                    String saveComment=editComment.getText().toString().trim();
-                    Map save=new HashMap();
-                    save.put("username",username);
-                    save.put("comment",saveComment);
-                        dbfinal.setValue(save);
-                    fAdapter.notifyDataSetChanged();
-
-
-                    }
-            }
-        });
-        */
         dbComment=FirebaseDatabase.getInstance().getReference().child("Comments");
+
+
+        //setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //ActionBar actionBar=getActionBar();
 
 
 
@@ -221,6 +201,8 @@ public class ViewSinglePost extends AppCompatActivity {
                // holder.getTxtComment().setText(model.getComment());
                 holder.setUsername(model.getUsername().toString());
                 holder.setComment(model.getComment().toString());
+                holder.setTxtTime(model.getTime());
+
 
             }
         };

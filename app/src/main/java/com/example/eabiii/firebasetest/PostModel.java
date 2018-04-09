@@ -1,5 +1,7 @@
 package com.example.eabiii.firebasetest;
 
+import java.util.Map;
+
 /**
  * Created by eabiii on 26/02/2018.
  */
@@ -7,16 +9,27 @@ package com.example.eabiii.firebasetest;
 public class PostModel {
 
     private String title,desc,username,image;
+    private Long time;
 
     public PostModel(){}
 
-    public PostModel(String title, String desc, String username,String image){
+    public PostModel(String title, String desc, String username,String image,Long time){
         this.title=title;
         this.desc=desc;
         this.username=username;
         this.image=image;
+        this.time=time;
 
 
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+
+        this.time = time;
     }
 
     public String getTitle() {

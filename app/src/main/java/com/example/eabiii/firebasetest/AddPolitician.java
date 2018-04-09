@@ -30,7 +30,7 @@ public class AddPolitician extends AppCompatActivity {
 
 
     private EditText name, position,partylist;
-    private Button add;
+    private Button add,back;
     List<String> dbPartylist=new ArrayList<String>();
     Spinner spinner;
     FirebaseDatabase db;
@@ -55,6 +55,7 @@ public class AddPolitician extends AppCompatActivity {
                 addPolitician();
             }
         });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         DatabaseReference dbGetParty= FirebaseDatabase.getInstance().getReference();//.child("PartyList").child("partylist");
         dbGetParty.child("PartyList").addValueEventListener(new ValueEventListener() {
             @Override

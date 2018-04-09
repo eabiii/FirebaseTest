@@ -1,6 +1,11 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -41,7 +46,7 @@ public class FragmentPartyList extends Fragment {
     private FloatingActionButton fab;
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
-    private TextView txt,mTextMessage,txtName;
+    private TextView txt,mTextMessage,txtName,empty;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
@@ -55,6 +60,8 @@ public class FragmentPartyList extends Fragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
         //pAdapter=new PostAdapter(pModel);
+        empty=view.findViewById(R.id.internet_connect);
+
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
       /*  fab=view.findViewById(R.id.fab3);
@@ -79,11 +86,32 @@ public class FragmentPartyList extends Fragment {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(),AddPartyList.class));
+
+                if(isConnected()) {
+
+                    startActivity(new Intent(getActivity(),AddPartyList.class));
+                  //  getActivity().finish();
+                }
+                else{
+
+                    AlertDialog alertDialog=new AlertDialog.Builder(getActivity()).create();
+                    alertDialog.setCancelable(false);
+                    alertDialog.setTitle("Internet Connection");
+                    alertDialog.setMessage("Please connect to the internet to access the content");
+                    alertDialog.setButton(getActivity().getApplicationContext().getString(R.string.ok),new DialogInterface.OnClickListener() {
+
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    alertDialog.show();
+                }
             }
         });
 
-
+        if (!isConnected()) {
+            empty.setVisibility(View.VISIBLE);
+        }
         return view;
     }
 
@@ -106,35 +134,59 @@ public class FragmentPartyList extends Fragment {
             @Override
             protected void onBindViewHolder(PartylistViewHolder holder, int position, PartylistModel model) {
                 // model=pModel.get(position);
-                final String PARTY_KEY=getRef(position).getKey().toString();
+                if (!isConnected()) {
+                    empty.setVisibility(View.VISIBLE);
+                    return;
+                }
+                else{
+                final String PARTY_KEY = getRef(position).getKey().toString();
 
-                Log.d("Party Name",PARTY_KEY);
-              //  holder.getTxtPoli().setText(model.getName());
+                Log.d("Party Name", PARTY_KEY);
+                //  holder.getTxtPoli().setText(model.getName());
                 holder.getTxtParty().setText(model.getPartylist());
-              //  holder.getTxtPos().setText(model.getPartylist());
+                //  holder.getTxtPos().setText(model.getPartylist());
                 //  Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
 
 
                 holder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Log.d("Post Key",PARTY_KEY);
-                        Intent intent=new Intent(getActivity(),ViewPartylistMember.class);
-                        intent.putExtra("Party List",PARTY_KEY);
+                        Log.d("Post Key", PARTY_KEY);
+                        Intent intent = new Intent(getActivity(), ViewPartylistMember.class);
+                        intent.putExtra("Party List", PARTY_KEY);
 
                         startActivity(intent);
                     }
                 });
+            }
+
 
             }
         };
-        fAdapter.startListening();
-        recyclerview.setAdapter(fAdapter);
+        if(isConnected()) {
+            fAdapter.startListening();
+            recyclerview.setAdapter(fAdapter);
+        }
 
     }
 
 
 
+    private boolean isConnected(){
+        if(getActivity()!=null){
+            ConnectivityManager connectivityManager=(ConnectivityManager)getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo=connectivityManager.getActiveNetworkInfo();
+
+            if(networkInfo !=null && networkInfo.isConnected()){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        return false;
+
+    }
 
 
 

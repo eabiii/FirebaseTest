@@ -7,14 +7,24 @@ package com.example.eabiii.firebasetest;
 public class CommentModel {
 
     private String username,comment;
+    private Long time;
+
 
     public CommentModel(){}
 
-    public CommentModel(String username,String comment) {
+    public CommentModel(String username,String comment, Long time) {
         this.username=username;
         this.comment=comment;
+        this.time=time;
     }
 
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
+    }
 
     public String getUsername() {
         return username;

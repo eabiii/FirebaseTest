@@ -40,6 +40,18 @@
             tools:layout_editor_absoluteX="119dp"
             tools:layout_editor_absoluteY="71dp" />
 
+        <TextView
+            android:id="@+id/txtTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/txtComment"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            android:text="Time" />
+
+
 
     </RelativeLayout>
 

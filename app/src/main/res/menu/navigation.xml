@@ -18,5 +18,9 @@
         android:id="@+id/navigation_partylist"
         android:icon="@drawable/ic_party_list_black_24dp"
         android:title="@string/title_partylist" />
+    <item
+        android:id="@+id/navigation_settings"
+        android:icon="@drawable/user_settings"
+        android:title="@string/title_settings" />
 
 </menu>

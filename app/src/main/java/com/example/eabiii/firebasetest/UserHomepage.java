@@ -1,8 +1,12 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -69,16 +73,8 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
         txtBirth=findViewById(R.id.birthday_Text);
         BottomNavigationView btmNav=findViewById(R.id.navigation);
         btmNav.setOnNavigationItemSelectedListener(this);
+
         /*
-        testing=findViewById(R.id.btnTestAdd);
-        testing.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent=new Intent(UserHomepage.this,AddPolitician.class);
-                startActivity(intent);
-            }
-        });
-        */
         settings=findViewById(R.id.btnSettings);
         settings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,6 +82,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
                 startActivity(new Intent(UserHomepage.this,Settings.class));
             }
         });
+        */
         mAuth=FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
         loadInfo();
@@ -132,8 +129,10 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
         */
         dbRef=FirebaseDatabase.getInstance().getReference().child("Post");
         String key=FirebaseDatabase.getInstance().getReference().child("Post").getKey();
-
-        loadFragment(new FragmentProfile());
+        BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
+        navigation.setSelectedItemId(R.id.navigation_posts);
+       // this.setViewPager(2);
+        loadFragment(new FragmentPost());
 
         //loadInfo();
 
@@ -148,6 +147,33 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
 
         }
 
+    }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+        if(!isConnected()){
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setMessage("Please Connect to the Internet");
+            alert.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.cancel();
+                    UserHomepage.this.finish();
+                }
+            });
+
+        }
+
+    }
+    private boolean isConnected(){
+        ConnectivityManager connectivityManager = (ConnectivityManager)getSystemService(Context.CONNECTIVITY_SERVICE);
+        if(connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        }
+        else
+            return false;
     }
 
 
@@ -170,7 +196,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
         final FirebaseUser user=mAuth.getCurrentUser();
         final FirebaseDatabase db=FirebaseDatabase.getInstance();
         String user_id=user.getEmail();
-         DatabaseReference dataRef=db.getReference("Users").child(encodeString(user_id)).child("username");
+         DatabaseReference dataRef=db.getReference("Users").child(encodeString(user_id)).child("full_name");
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -199,7 +225,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
 
             }
         });
-        dataRef=db.getReference("Users").child(encodeString(user_id)).child("birthday");
+        dataRef=db.getReference("Users").child(encodeString(user_id)).child("username");
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -238,7 +264,7 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         Fragment fragment=null;
-
+       // this.setViewPager(2);
         switch (item.getItemId()){
             case R.id.navigation_dashboard:
                 fragment=new FragmentProfile();
@@ -251,6 +277,9 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
                 break;
             case R.id.navigation_partylist:
                 fragment=new FragmentPartyList();
+                break;
+            case R.id.navigation_settings:
+                fragment=new FragmentSettings();
                 break;
 
 
