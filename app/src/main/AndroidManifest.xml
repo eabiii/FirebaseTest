@@ -7,9 +7,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/rp_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/rp_logo_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Home">
@@ -27,6 +27,7 @@
             android:parentActivityName=".UserHomepage" />
         <activity
             android:name=".ViewSinglePost"
+            android:windowSoftInputMode="stateHidden|adjustPan"
             android:parentActivityName=".UserHomepage" />
         <activity
             android:name=".ViewPolitician"

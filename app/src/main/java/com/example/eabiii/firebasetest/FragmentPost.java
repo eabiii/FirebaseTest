@@ -53,7 +53,7 @@ public class FragmentPost extends Fragment {
     private FloatingActionButton fab;
     private ArrayList<PostModel> pModel=new ArrayList<>();
 
-    private TextView txt,mTextMessage,txtName,empty;
+    private TextView txt,mTextMessage,txtName,internet,empty;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
@@ -69,7 +69,8 @@ public class FragmentPost extends Fragment {
         //pAdapter=new PostAdapter(pModel);
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
-        empty=view.findViewById(R.id.internet_connect);
+        internet=view.findViewById(R.id.internet_connect);
+        empty=view.findViewById(R.id.emptytext);
 
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         String key=FirebaseDatabase.getInstance().getReference().child("Post").getKey();
@@ -106,7 +107,7 @@ public class FragmentPost extends Fragment {
 
         loadInfo();
         if (!isConnected()) {
-            empty.setVisibility(View.VISIBLE);
+            internet.setVisibility(View.VISIBLE);
         }
         LinearLayoutManager lm=new LinearLayoutManager(getActivity());
         lm.setStackFromEnd(true);
@@ -142,7 +143,7 @@ public class FragmentPost extends Fragment {
             protected void onBindViewHolder( PostHolder holder, int position,  PostModel model) {
                 // model=pModel.get(position);
                 if (!isConnected()) {
-                    empty.setVisibility(View.VISIBLE);
+                    internet.setVisibility(View.VISIBLE);
                     return;
                 }
                 else {
@@ -224,6 +225,11 @@ public class FragmentPost extends Fragment {
             }
         }
         return false;
+
+    }
+
+    private void checkChildren(){
+
 
     }
 

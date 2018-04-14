@@ -55,7 +55,7 @@ public class FragmentProfile extends Fragment {
     Query query;
     private ArrayList<PostModel> pModel=new ArrayList<>();
     boolean b= false;
-    private TextView txt,mTextMessage,txtName;
+    private TextView txt,mTextMessage,txtName,txtEmpty;
     private FloatingActionButton fab;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
@@ -71,6 +71,7 @@ public class FragmentProfile extends Fragment {
         recyclerview.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
         //pAdapter=new PostAdapter(pModel);
         mAuth=FirebaseAuth.getInstance();
+        txtEmpty=view.findViewById(R.id.emptytext);
         mCurrentUser=mAuth.getCurrentUser();
         loadInfo();
         mTextMessage = (TextView) view.findViewById(R.id.message);
@@ -97,7 +98,7 @@ public class FragmentProfile extends Fragment {
        // dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
         dbRef= FirebaseDatabase.getInstance().getReference().child("Filter Post").child(mCurrentUser.getUid());
         //recyclerview.setAdapter(fAdapter);
-
+        checkChildren();
 
         return view;
     }
@@ -165,6 +166,28 @@ public class FragmentProfile extends Fragment {
 
     }
 
+    private void checkChildren(){
+        dbRef= FirebaseDatabase.getInstance().getReference().child("Filter Post").child(mCurrentUser.getUid());
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    recyclerview.setVisibility(View.VISIBLE);
+                    txtEmpty.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    recyclerview.setVisibility(View.INVISIBLE);
+                    txtEmpty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     private void loadInfo(){
 
         final FirebaseUser user=mAuth.getCurrentUser();
@@ -205,10 +228,6 @@ public class FragmentProfile extends Fragment {
 
     }
 
-    private void setupRecycler(){
-
-
-    }
 
     private String encodeString(String s){
 

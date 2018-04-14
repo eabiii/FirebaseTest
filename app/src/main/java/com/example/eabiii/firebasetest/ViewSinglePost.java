@@ -115,7 +115,7 @@ public class ViewSinglePost extends AppCompatActivity {
                 editComment.setBackgroundResource(android.R.drawable.editbox_background_normal);
                 editComment.requestFocus();
                 InputMethodManager imm=(InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.showSoftInput(editComment,InputMethodManager.SHOW_IMPLICIT);
+                imm.showSoftInput(editComment,0);
             }
         });
 

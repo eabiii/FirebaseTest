@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 public class ViewPartylistMember extends AppCompatActivity {
-    private TextView txtpParty;
+    private TextView txtpParty,txtEmpty;
     private Button rateButton;
     private ArrayList<PoliticianModel> politicianModels=new ArrayList<>();
     String username="";
@@ -41,12 +41,14 @@ public class ViewPartylistMember extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_partylist_member);
         txtpParty=findViewById(R.id.memberName);
+        txtEmpty=findViewById(R.id.emptytext);
         POLI_KEY=getIntent().getExtras().get("Party List").toString();
         txtpParty.setText(POLI_KEY);
         Log.d("key",POLI_KEY);
         rvPartyList=findViewById(R.id.memberView);
         rvPartyList.setLayoutManager(new LinearLayoutManager(this));
         rvPartyList.setItemAnimator(new DefaultItemAnimator());
+        checkChildren();
     }
 
 
@@ -54,7 +56,7 @@ public class ViewPartylistMember extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
         Log.d("TEST!","TEST123");
-        DatabaseReference dbPostComment=FirebaseDatabase.getInstance().getReference().child("PartyList").child(POLI_KEY).child("members");
+        final DatabaseReference dbPostComment=FirebaseDatabase.getInstance().getReference().child("PartyList").child(POLI_KEY).child("members");
 
         FirebaseRecyclerOptions<PartyListMemberModel> options=new FirebaseRecyclerOptions.Builder<PartyListMemberModel>().setQuery(dbPostComment,PartyListMemberModel.class).build();
         Log.d("TEST2","TEST123");
@@ -62,10 +64,12 @@ public class ViewPartylistMember extends AppCompatActivity {
         fAdapter=new FirebaseRecyclerAdapter<PartyListMemberModel,PartyListMemberViewHolder>(options) {
             @Override
             public PartyListMemberViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
                 Log.d("TEST3","TEST123");
 
                 View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_partylist_politician,parent,false);
                 Log.d("TEST4","TEST123");
+
 
                 return new PartyListMemberViewHolder(view);
 
@@ -75,6 +79,7 @@ public class ViewPartylistMember extends AppCompatActivity {
             protected void onBindViewHolder( PartyListMemberViewHolder holder, int position,  PartyListMemberModel model) {
                 Log.d("TEST!","TEST123");
                 // holder.getTxtUser().setText(model.getUsername());
+
                  holder.getTxtPosition().setText(model.getPosition().toString());
                 holder.getTxtParty().setText(model.getName().toString());
                // holder.setComment(model.getComment().toString());
@@ -84,6 +89,29 @@ public class ViewPartylistMember extends AppCompatActivity {
         fAdapter.startListening();
         rvPartyList.setAdapter(fAdapter);
 
+
+    }
+
+    private void checkChildren(){
+        dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(POLI_KEY).child("members");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    rvPartyList.setVisibility(View.VISIBLE);
+                    txtEmpty.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    rvPartyList.setVisibility(View.INVISIBLE);
+                    txtEmpty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
 

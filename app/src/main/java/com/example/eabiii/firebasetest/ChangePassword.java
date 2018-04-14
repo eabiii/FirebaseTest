@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class ChangePassword extends AppCompatActivity {
     FirebaseAuth mAuth;
     FirebaseUser mCurrentUser;
     DatabaseReference dbRef;
+    ProgressDialog progressDialog;
 
 
     public  static String userName;
@@ -39,11 +41,41 @@ public class ChangePassword extends AppCompatActivity {
         oldPass=findViewById(R.id.editOldPass);
         newPass=findViewById(R.id.editNewPass);
         confirmPass=findViewById(R.id.editNewPassConfirm);
+        progressDialog=new ProgressDialog(ChangePassword.this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setTitle("Changing Password");
 
         confirm=findViewById(R.id.btnChange);
         confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(oldPass.getText().toString().isEmpty()){
+                    oldPass.setError("Old Password is required!");
+                    oldPass.requestFocus();
+                    return;
+                }
+                if(newPass.getText().toString().isEmpty()){
+                    newPass.setError("Old Password is required!");
+                    newPass.requestFocus();
+                    return;
+                }
+                if(confirmPass.getText().toString().isEmpty()){
+                    confirmPass.setError("Old Password is required!");
+                    confirmPass.requestFocus();
+                    return;
+                }
+                if(newPass.getText().toString().length()<6){
+                    newPass.setError("Minumum length is 6");
+                    newPass.requestFocus();
+                    return;
+
+                }
+                if(confirmPass.getText().toString().length()<6){
+                    confirmPass.setError("Minumum length is 6");
+                    confirmPass.requestFocus();
+                    return;
+
+                }
                 changePassword();
             }
         });
@@ -119,6 +151,8 @@ public class ChangePassword extends AppCompatActivity {
     }
 
     private void changePassword(){
+        progressDialog.show();
+
         AuthCredential credential= EmailAuthProvider.getCredential(mCurrentUser.getEmail(),oldPass.getText().toString().trim());
         mCurrentUser.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
@@ -129,10 +163,19 @@ public class ChangePassword extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
+                                    oldPass.setText("");
+                                    newPass.setText("");
+                                    confirmPass.setText("");
+                                    progressDialog.dismiss();
+
                                     Toast.makeText(getApplicationContext(), "Password Changed!", Toast.LENGTH_SHORT).show();
 
                                 }
                                 else{
+                                    oldPass.setText("");
+                                    newPass.setText("");
+                                    confirmPass.setText("");
+                                    progressDialog.dismiss();
                                     Toast.makeText(getApplicationContext(), "Error password not updated!", Toast.LENGTH_SHORT).show();
 
                                 }
@@ -141,11 +184,16 @@ public class ChangePassword extends AppCompatActivity {
 
                     }
                     else{
+                        progressDialog.dismiss();
                         Toast.makeText(getApplicationContext(), "New Password and Confrim New Password does not match!", Toast.LENGTH_SHORT).show();
 
                     }
                 }
-                Toast.makeText(getApplicationContext(), "Old Password does not match with current password!", Toast.LENGTH_SHORT).show();
+                else{
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Old password does not match!", Toast.LENGTH_SHORT).show();
+
+                }
 
             }
         });

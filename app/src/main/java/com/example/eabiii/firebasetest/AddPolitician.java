@@ -54,6 +54,19 @@ public class AddPolitician extends AppCompatActivity {
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(name.getText().toString().isEmpty()){
+                    name.setError("Name is required");
+                    name.requestFocus();
+                    return;
+
+                }
+                if(position.getText().toString().isEmpty()){
+                    position.setError("Name is required");
+                    position.requestFocus();
+                    return;
+                }
+
                 Log.d("CLICK ME","CLICK");
                 addPolitician();
             }
@@ -86,13 +99,9 @@ public class AddPolitician extends AppCompatActivity {
         progressDialog=new ProgressDialog(AddPolitician.this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.setTitle("Adding Politician");
-
-        //dbRef=FirebaseDatabase.getInstance().getReference().child(pName);
-
-
-
-
     }
+
+
 
 
     private void addPolitician(){
@@ -136,40 +145,6 @@ public class AddPolitician extends AppCompatActivity {
                                         //}
                                //     });
 
-                            /*
-                            dbParty.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                                    Map newPost=new HashMap();
-                                    newPost.put("name",pName);
-                                    newPost.put("position",pPosition);
-                                    dbParty.setValue(newPost);
-
-                                    addPost.child("name").setValue(pName);
-                                    addPost.child("position").setValue(pPosition).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
-
-                                        }
-                                    });
-
-                                    progressDialog.dismiss();
-
-
-
-                                }
-
-                                @Override
-                                public void onCancelled(DatabaseError databaseError) {
-                                    progressDialog.dismiss();
-
-                                }
-                            });
-                            */
 
 
                         }
@@ -202,25 +177,5 @@ public class AddPolitician extends AppCompatActivity {
 
     }
 
-    private boolean checkIfPoliticianExist(String pName){
 
-        dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-
-                    b=true;
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-        Log.d("TESTING",b.toString());
-        return b;
-
-    }
 }
