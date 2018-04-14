@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
@@ -58,6 +59,7 @@ public class ViewSinglePost extends AppCompatActivity {
     DatabaseReference dbSave;
     FirebaseAuth mAuth;
     FirebaseRecyclerAdapter fAdapter;
+    ProgressDialog progressDialog;
 
 
     @Override
@@ -72,6 +74,7 @@ public class ViewSinglePost extends AppCompatActivity {
         rvComment.setLayoutManager(new LinearLayoutManager(this));
         rvComment.setItemAnimator(new DefaultItemAnimator());
         rvComment.addItemDecoration(new DividerItemDecoration(this,LinearLayoutManager.VERTICAL));
+
         dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         POST_KEY=getIntent().getExtras().get("Post ID").toString();
         mAuth=FirebaseAuth.getInstance();
@@ -85,7 +88,7 @@ public class ViewSinglePost extends AppCompatActivity {
                 String imgUrl=(String)dataSnapshot.child("image").getValue();
                 postTitle.setText(title);
                 postDesc.setText(desc);
-                Picasso.with(ViewSinglePost.this).load(imgUrl).into(img);
+                Picasso.with(ViewSinglePost.this).load(imgUrl).fit().into(img);
             }
 
             @Override

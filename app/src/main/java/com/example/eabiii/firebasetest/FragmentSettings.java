@@ -33,6 +33,8 @@ public class FragmentSettings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         mAuth=FirebaseAuth.getInstance();
         mCurrentUser=mAuth.getCurrentUser();
+        progressDialog=new ProgressDialog(getActivity());
+
         progressDialog.setMessage("Please Wait...");
         progressDialog.setTitle("Logging Out");
         loadInfo();
@@ -43,13 +45,16 @@ public class FragmentSettings extends Fragment {
                 startActivity(new Intent(getActivity(),ChangePassword.class));
             }
         });
+        /*
         changeUser=view.findViewById(R.id.change_username);
         changeUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startActivity(new Intent(getActivity(),ChangeUsername.class));
 
             }
         });
+        */
         logout=view.findViewById(R.id.logout);
         logout.setOnClickListener(new View.OnClickListener() {
             @Override

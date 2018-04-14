@@ -54,7 +54,7 @@ public class FragmentProfile extends Fragment {
     private String fullName;
     Query query;
     private ArrayList<PostModel> pModel=new ArrayList<>();
-
+    boolean b= false;
     private TextView txt,mTextMessage,txtName;
     private FloatingActionButton fab;
     private Button post,logout,addPol;
@@ -70,15 +70,17 @@ public class FragmentProfile extends Fragment {
         recyclerview.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerview.addItemDecoration(new DividerItemDecoration(getActivity(),LinearLayoutManager.VERTICAL));
         //pAdapter=new PostAdapter(pModel);
+        mAuth=FirebaseAuth.getInstance();
+        mCurrentUser=mAuth.getCurrentUser();
+        loadInfo();
         mTextMessage = (TextView) view.findViewById(R.id.message);
         txtName=view.findViewById(R.id.name_Text);
         fab=view.findViewById(R.id.fab);
-        dbRef= FirebaseDatabase.getInstance().getReference().child("Post");
         String key=FirebaseDatabase.getInstance().getReference().child("Post").getKey();
-        mAuth=FirebaseAuth.getInstance();
+
         txt=view.findViewById(R.id.txtName);
         post=view.findViewById(R.id.btnPost);
-        mCurrentUser=mAuth.getCurrentUser();
+
         logout=view.findViewById(R.id.btnLogOut);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,13 +89,13 @@ public class FragmentProfile extends Fragment {
                 Snackbar.make(view,"Add Post",Snackbar.LENGTH_LONG).setAction("Action",null).show();
             }
         });
-        loadInfo();
+
         LinearLayoutManager lm=new LinearLayoutManager(getActivity());
         lm.setStackFromEnd(true);
         lm.setReverseLayout(true);
         recyclerview.setLayoutManager(lm);
        // dbFinalRef=dbRef.orderByChild("username").equalTo(userName);
-
+        dbRef= FirebaseDatabase.getInstance().getReference().child("Filter Post").child(mCurrentUser.getUid());
         //recyclerview.setAdapter(fAdapter);
 
 
@@ -114,6 +116,7 @@ public class FragmentProfile extends Fragment {
 
             @Override
             public PostHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+
                 View view= LayoutInflater.from(parent.getContext()).inflate(R.layout.list_profile,parent,false);
 
                 return new PostHolder(view);
@@ -122,7 +125,10 @@ public class FragmentProfile extends Fragment {
             @Override
             protected void onBindViewHolder(PostHolder holder, int position, PostModel model) {
                 // model=pModel.get(position);
-                if (model.getUsername().equalsIgnoreCase(userName)) {
+
+
+                    //b=true;
+                    Log.d("BOOLEAAN",Boolean.toString(b));
                     final String POST_KEY = getRef(position).getKey().toString();
                     Log.d("Post Key", POST_KEY);
                     holder.getTxtTitle().setText(model.getTitle());
@@ -133,6 +139,7 @@ public class FragmentProfile extends Fragment {
                     //Log.d("TIMESS",.toString(model.getTimestamp()));
                     //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
                     Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                    /*
                     holder.v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -142,11 +149,17 @@ public class FragmentProfile extends Fragment {
                             startActivity(intent);
                         }
                     });
-                }
+                    */
+
+
             }
         };
-        recyclerview.setAdapter(fAdapter);
-        fAdapter.startListening();
+
+            recyclerview.setAdapter(fAdapter);
+            fAdapter.startListening();
+
+
+
 
 
 
@@ -162,6 +175,8 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 userName=String.valueOf(dataSnapshot.getValue());
+                Log.d("USERNEM", userName);
+
 //               txt.setText(userName);
             }
 

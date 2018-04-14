@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.annotation.NonNull;
@@ -43,7 +44,7 @@ public class PostActivity extends AppCompatActivity {
     DatabaseReference dbUser;
     FirebaseUser mCurrentUser;
     private String userName;
-
+    ProgressDialog progressDialog;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,9 @@ public class PostActivity extends AppCompatActivity {
         mAuth=FirebaseAuth.getInstance();
         path= FirebaseStorage.getInstance().getReference();
         dbRef=FirebaseDatabase.getInstance().getReference().child("Post");
+        progressDialog=new ProgressDialog(PostActivity.this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setTitle("Creating Post");
         mCurrentUser=mAuth.getCurrentUser();
         dbUser=FirebaseDatabase.getInstance().getReference().child("Users").child(encodeString(mCurrentUser.getEmail()));
         loadInfo();
@@ -79,6 +83,7 @@ public class PostActivity extends AppCompatActivity {
 
                 }
                 else{
+                    progressDialog.show();
 
                     try{
 
@@ -111,6 +116,10 @@ public class PostActivity extends AppCompatActivity {
 */
                                    // Toast.makeText(getApplicationContext(),"Successfull Posted",Toast.LENGTH_SHORT).show();
 
+
+                                    dbRef=db.getInstance().getReference().child("Filter Post").child(mCurrentUser.getUid());
+                                    final DatabaseReference filterPost=dbRef.push();
+
                                     addPost.child("title").setValue(dbTitle);
                                     addPost.child("desc").setValue(dbDesc);
                                     addPost.child("image").setValue(image);
@@ -118,10 +127,23 @@ public class PostActivity extends AppCompatActivity {
                                     addPost.child("username").setValue(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
-                                            Toast.makeText(getApplicationContext(),"Sucessfully Posted!",Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(PostActivity.this,UserHomepage.class));
+                                            filterPost.child("title").setValue(dbTitle);
+                                            filterPost.child("desc").setValue(dbDesc);
+                                            filterPost.child("image").setValue(image);
+                                            filterPost.child("time").setValue(ServerValue.TIMESTAMP);
+                                            filterPost.child("username").setValue(userName).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<Void> task) {
+                                                    progressDialog.dismiss();
+
+                                                    Toast.makeText(getApplicationContext(),"Sucessfully Posted!",Toast.LENGTH_SHORT).show();
+                                                    startActivity(new Intent(PostActivity.this,UserHomepage.class));
+                                                }
+                                            });
+
                                         }
                                     });
+                                    progressDialog.dismiss();
 
 
                                     // addPost.child("username").setValue(dataSnapshot.child("username"))
@@ -130,6 +152,7 @@ public class PostActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onCancelled(DatabaseError databaseError) {
+                                    progressDialog.dismiss();
 
                                 }
                             });

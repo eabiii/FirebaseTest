@@ -37,6 +37,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
     Button birthDate;
     DatePickerDialog.OnDateSetListener dateSetListener;
     ProgressDialog progressDialog;
+
    // String user_id;
     int b=0;
 
@@ -85,6 +86,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         mAuth = FirebaseAuth.getInstance();
 
         findViewById(R.id.register_Btn).setOnClickListener(this);
+
 
 
 

@@ -154,7 +154,7 @@ public class FragmentPost extends Fragment {
                     holder.setTxtTime(model.getTime());
 
                     //holder.getImgView(Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView));
-                    Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                    Picasso.with(holder.imgView.getContext()).load(model.getImage()).fit().into(holder.imgView);
                     holder.v.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -37,6 +38,8 @@ public class AddPolitician extends AppCompatActivity {
     DatabaseReference dbRef;
     FirebaseAuth mAuth;
     Boolean b=false;
+    ProgressDialog progressDialog;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,10 @@ public class AddPolitician extends AppCompatActivity {
 
             }
         });
+        progressDialog=new ProgressDialog(AddPolitician.this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setTitle("Adding Politician");
+
         //dbRef=FirebaseDatabase.getInstance().getReference().child(pName);
 
 
@@ -90,86 +97,104 @@ public class AddPolitician extends AppCompatActivity {
 
     private void addPolitician(){
         Log.d("ENTER","ENTER");
+        progressDialog.show();
         final String pName=name.getText().toString().trim();
         final String pPosition=position.getText().toString().trim();
         final String pPartylist=spinner.getSelectedItem().toString();
-
-        if(checkIfPoliticianExist(pName)){
-            dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
-            final DatabaseReference addPol=dbRef.push();
-            dbRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    Map newPost=new HashMap();
-                    newPost.put("name",pName);
-                    newPost.put("position",pPosition);
-                    newPost.put("partylist",pPartylist);
-                    dbRef.setValue(newPost);
-                    /*.addOnCompleteListener(new OnCompleteListener<Void>() {
+        dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
+                    dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
+                    final DatabaseReference addPol=dbRef.push();
+                    dbRef.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            Map newPost=new HashMap();
+                            newPost.put("name",pName);
+                            newPost.put("position",pPosition);
+                            newPost.put("partylist",pPartylist);
+                            dbRef.setValue(newPost);
+                                    FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
+                                    String uid=dbKey.getReference("PartyList").push().getKey();
+                                    final DatabaseReference dbParty=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist).child("members").child(pName);
+                                    final DatabaseReference addPost=dbParty.push();
+                                    Map partyMap=new HashMap();
+                            partyMap.put("name",pName);
+                            partyMap.put("position",pPosition);
+                            dbParty.setValue(partyMap);
+                                    //addPost.child("name").setValue(pName);
+                                    //addPost.child("position").setValue(pPosition).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                      //  @Override
+                                        //public void onComplete(@NonNull Task<Void> task) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+
+                                        //}
+                               //     });
+
+                            /*
+                            dbParty.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    Map newPost=new HashMap();
+                                    newPost.put("name",pName);
+                                    newPost.put("position",pPosition);
+                                    dbParty.setValue(newPost);
+
+                                    addPost.child("name").setValue(pName);
+                                    addPost.child("position").setValue(pPosition).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            progressDialog.dismiss();
+                                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+
+                                        }
+                                    });
+
+                                    progressDialog.dismiss();
+
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    progressDialog.dismiss();
+
+                                }
+                            });
+                            */
+
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+                            progressDialog.dismiss();
+
                         }
                     });
-*/
-
-                    //addPol.child("name").setValue(pName);
-                    //addPol.child("position").setValue(pPosition);
-                    /*
-                    addPol.child("partylist").setValue(pPartylist).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
-                        }
-                    });
-*/
-                FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
-                String uid=dbKey.getReference("PartyList").push().getKey();
-                final DatabaseReference dbParty=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist).child("members").child(uid);
-                final DatabaseReference addPost=dbParty.push();
-                    dbParty.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                       Map newPost=new HashMap();
-                        newPost.put("name",pName);
-
-                        dbParty.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(AddPolitician.this,UserHomepage.class));
-                            }
-                        });
-                        /*
-                        dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(AddPolitician.this,UserHomepage.class));
-                            }
-                        });
-                        */
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
 
 
                 }
+                progressDialog.dismiss();
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            }
 
-                }
-            });
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-        }
+            }
+        });
+
+
+
 
 
 

@@ -45,15 +45,14 @@ public class ChangePassword extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 changePassword();
-
-                Toast.makeText(getApplicationContext(), "Password Changed!", Toast.LENGTH_SHORT).show();
             }
         });
         back=findViewById(R.id.btnCancel);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ChangePassword.this,Settings.class));
+                startActivity(new Intent(ChangePassword.this,UserHomepage.class));
+                finish();
             }
         });
 
@@ -130,13 +129,24 @@ public class ChangePassword extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
                                 if(task.isSuccessful()){
+                                    Toast.makeText(getApplicationContext(), "Password Changed!", Toast.LENGTH_SHORT).show();
+
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Error password not updated!", Toast.LENGTH_SHORT).show();
 
                                 }
                             }
                         });
 
                     }
+                    else{
+                        Toast.makeText(getApplicationContext(), "New Password and Confrim New Password does not match!", Toast.LENGTH_SHORT).show();
+
+                    }
                 }
+                Toast.makeText(getApplicationContext(), "Old Password does not match with current password!", Toast.LENGTH_SHORT).show();
+
             }
         });
 

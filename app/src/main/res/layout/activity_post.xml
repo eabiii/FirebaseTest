@@ -20,7 +20,7 @@
             android:layout_height="250dp"
             android:adjustViewBounds="true"
             android:background="@drawable/addimage"
-            android:scaleType="centerCrop"></ImageButton>
+            android:scaleType="fitXY"></ImageButton>
 
         <EditText
             android:id="@+id/txtTitle"

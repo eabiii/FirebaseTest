@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,6 +35,7 @@ public class AddPartyList extends AppCompatActivity {
     DatabaseReference dbRef;
     FirebaseAuth mAuth;
     Boolean b=false;
+    ProgressDialog progressDialog;
 
 
 
@@ -65,54 +67,45 @@ public class AddPartyList extends AppCompatActivity {
     private void addPartylist(){
         Log.d("ENTER","ENTER");
         final String pPartylist=partylist.getText().toString().trim();
+        dbRef=FirebaseDatabase.getInstance().getReference().child("Partylist").child(pPartylist);
+        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(!dataSnapshot.exists()){
 
-        if(checkIfPartylistExist(pPartylist)){
-          //  String key=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
-            dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
+                    dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
 
-            final DatabaseReference addPol=dbRef.push();
-            dbRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                   Map newPost=new HashMap();
-                  //  newPost.put("name",pPartylist);
-                    newPost.put("partylist",pPartylist);
-                    dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    final DatabaseReference addPol=dbRef.push();
+                    dbRef.addValueEventListener(new ValueEventListener() {
                         @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddPartyList.this,UserHomepage.class));
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            Map newPost=new HashMap();
+                            //  newPost.put("name",pPartylist);
+                            newPost.put("partylist",pPartylist);
+                            dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(AddPartyList.this,UserHomepage.class));
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
                         }
                     });
-
-
-
-
-                    //addPol.child("name").setValue(pName);
-                    //addPol.child("position").setValue(pPosition);
-                    /*
-                    addPol.child("partylist").setValue(pPartylist).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
-                        }
-                    });
-*/
-
-
-
                 }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
-
-        }
-
+            }
+        });
 
 
 

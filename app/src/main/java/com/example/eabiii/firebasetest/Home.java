@@ -9,6 +9,7 @@ import android.widget.Button;
 public class Home extends AppCompatActivity {
 
     private Button login,signout;
+    private String HOME_KEY="HOME_KEY";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,7 +26,9 @@ public class Home extends AppCompatActivity {
         signout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(Home.this,Register.class));
+                Intent intent=new Intent(Home.this,Register.class);
+                intent.putExtra("Home Key",HOME_KEY);
+                startActivity(intent);
             }
         });
     }
