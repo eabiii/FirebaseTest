@@ -6,25 +6,34 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context="com.example.eabiii.firebasetest.AddPolitician">
+
+
+    <ImageButton
+        android:id="@+id/imageBtn"
+        android:layout_width="244dp"
+        android:layout_height="117dp"
+        android:layout_marginTop="3dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/addimage"
+        android:scaleType="fitXY"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
     <TextView
         android:id="@+id/txtRestaurant"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="13dp"
-        android:layout_marginTop="16dp"
         android:text="Politician Name"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/editName"
-        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageBtn" />
 
     <EditText
         android:id="@+id/editName"
         android:layout_width="302dp"
         android:layout_height="39dp"
-        android:layout_marginTop="5dp"
         android:ems="10"
         android:inputType="textPersonName"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -45,11 +54,8 @@
         android:id="@+id/editPosition"
         android:layout_width="300dp"
         android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="18dp"
         android:ems="10"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/txtWeight"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtPosi" />
@@ -58,20 +64,19 @@
         android:id="@+id/txtWeight"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginBottom="7dp"
+        android:layout_marginTop="1dp"
         android:text="Party List"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/editPartylist"
-        app:layout_constraintHorizontal_bias="0.501"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editPosition" />
 
     <Button
         android:id="@+id/btnAddParty"
         android:layout_width="131dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="204dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginBottom="84dp"
+        android:layout_marginStart="28dp"
         android:backgroundTint="#50000000"
         android:text="SUBMIT"
         android:textColor="#ffffff"
@@ -82,7 +87,7 @@
         android:id="@+id/btnBack"
         android:layout_width="121dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="204dp"
+        android:layout_marginBottom="84dp"
         android:layout_marginEnd="42dp"
         android:layout_marginStart="39dp"
         android:backgroundTint="#50000000"
@@ -97,13 +102,14 @@
         android:id="@+id/editPartylist"
         android:layout_width="291dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="17dp"
-        android:ems="10"
+        android:layout_marginTop="2dp"
 
+        android:ems="10"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/btnAddParty"
+        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"></Spinner>
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtWeight"></Spinner>
 <!--
     <EditText
         android:id="@+id/editPartylist"

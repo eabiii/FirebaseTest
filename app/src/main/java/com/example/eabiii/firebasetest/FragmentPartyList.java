@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -28,6 +29,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -45,11 +47,11 @@ public class FragmentPartyList extends Fragment {
     private String fullName;
     private FloatingActionButton fab;
     private ArrayList<PostModel> pModel=new ArrayList<>();
-
     private TextView txt,mTextMessage,txtName,empty;
     private Button post,logout,addPol;
     private RecyclerView recyclerview;
     private PostAdapter pAdapter;
+    ImageView imgView;
 
 
     @Override
@@ -112,6 +114,8 @@ public class FragmentPartyList extends Fragment {
         if (!isConnected()) {
             empty.setVisibility(View.VISIBLE);
         }
+
+       // imgView=view.findViewById(R.id.imageParty);
         return view;
     }
 
@@ -145,7 +149,7 @@ public class FragmentPartyList extends Fragment {
                 //  holder.getTxtPoli().setText(model.getName());
                 holder.getTxtParty().setText(model.getPartylist());
                 //  holder.getTxtPos().setText(model.getPartylist());
-                //  Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                  Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
 
 
                 holder.mView.setOnClickListener(new View.OnClickListener() {

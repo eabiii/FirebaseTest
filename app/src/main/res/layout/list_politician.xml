@@ -23,11 +23,12 @@
             app:layout_constraintEnd_toStartOf="@+id/txtPartyList"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            android:scaleType="fitXY"
             app:srcCompat="@drawable/addpolitician" />
 
         <TextView
             android:id="@+id/txtPoliName"
-            android:layout_width="157dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toEndOf="@+id/imagePoli"
@@ -41,7 +42,7 @@
 
         <TextView
             android:id="@+id/txtPosition"
-            android:layout_width="53dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtPoliName"
             android:layout_toEndOf="@+id/imagePoli"
@@ -55,7 +56,7 @@
 
         <TextView
             android:id="@+id/txtPartyList"
-            android:layout_width="53dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/txtPosition"
             android:layout_toEndOf="@+id/imagePoli"

@@ -43,7 +43,7 @@ public class ViewSinglePost extends AppCompatActivity {
 
 
     private ImageView img;
-    private TextView postTitle,postDesc;
+    private TextView postTitle,postDesc,txtEmpty;
     private ArrayList<CommentModel> commentModels=new ArrayList<>();
    // private Button addComment;
     private EditText editComment;
@@ -99,6 +99,7 @@ public class ViewSinglePost extends AppCompatActivity {
         setupFirebase();
         editComment=findViewById(R.id.txtComment);
         fabcomment=findViewById(R.id.fabcomment);
+        txtEmpty=findViewById(R.id.emptytext);
 
         editComment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -143,7 +144,7 @@ public class ViewSinglePost extends AppCompatActivity {
         });
 
         dbComment=FirebaseDatabase.getInstance().getReference().child("Comments");
-
+        checkChildren();
 
         //setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -212,6 +213,28 @@ public class ViewSinglePost extends AppCompatActivity {
         fAdapter.startListening();
         rvComment.setAdapter(fAdapter);
 
+    }
+
+    private void checkChildren(){
+        dbRef=FirebaseDatabase.getInstance().getReference().child("Post").child(POST_KEY).child("comments");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    rvComment.setVisibility(View.VISIBLE);
+                    txtEmpty.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    rvComment.setVisibility(View.INVISIBLE);
+                    txtEmpty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private boolean validate(){

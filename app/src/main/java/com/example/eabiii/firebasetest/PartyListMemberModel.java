@@ -6,7 +6,7 @@ package com.example.eabiii.firebasetest;
 
 public class PartyListMemberModel {
 
-    private String name, position;
+    private String name, position, image;
 
 
     public PartyListMemberModel(){}
@@ -31,5 +31,12 @@ public class PartyListMemberModel {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+    public void setImage(String image) {
+        this.image = image;
     }
 }

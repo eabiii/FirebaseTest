@@ -57,6 +57,12 @@ public class RatePolitician extends AppCompatActivity {
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(comments.getText().toString().trim().isEmpty()){
+                    comments.setError("Please enter a comment!");
+                    comments.requestFocus();
+                    return;
+
+                }
                 FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
                 String uid=dbKey.getReference("Politician").push().getKey();
                 dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(poliName.getText().toString()).child("ratings").child(uid);
@@ -129,6 +135,9 @@ public class RatePolitician extends AppCompatActivity {
     protected void onStart(){
         super.onStart();
     }
+
+
+
 
     private void setupFirebase(){
         mAuth=FirebaseAuth.getInstance();

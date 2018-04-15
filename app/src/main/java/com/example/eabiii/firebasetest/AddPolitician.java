@@ -2,6 +2,7 @@ package com.example.eabiii.firebasetest;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,10 +11,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -21,6 +24,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,6 +38,10 @@ public class AddPolitician extends AppCompatActivity {
 
     private EditText name, position,partylist;
     private Button add,back;
+    private ImageButton img;
+    private static final int GALLERY_CODE=2;
+    Uri uri=null;
+    StorageReference path;
     List<String> dbPartylist=new ArrayList<String>();
     Spinner spinner;
     FirebaseDatabase db;
@@ -46,7 +56,9 @@ public class AddPolitician extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_politician);
         name=findViewById(R.id.editName);
+        back=findViewById(R.id.btnBack);
         position=findViewById(R.id.editPosition);
+        img=findViewById(R.id.imageBtn);
       //  partylist=findViewById(R.id.editPartylist);
         mAuth=FirebaseAuth.getInstance();
         spinner=findViewById(R.id.editPartylist);
@@ -66,9 +78,28 @@ public class AddPolitician extends AppCompatActivity {
                     position.requestFocus();
                     return;
                 }
+                if(uri==null){
+                    name.setError("Image is required");
+                    name.requestFocus();
+                    return;
+                }
 
                 Log.d("CLICK ME","CLICK");
                 addPolitician();
+            }
+        });
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+            }
+        });
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent=new Intent(Intent.ACTION_GET_CONTENT);
+                intent.setType("image/*");
+                startActivityForResult(intent,GALLERY_CODE);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -99,6 +130,18 @@ public class AddPolitician extends AppCompatActivity {
         progressDialog=new ProgressDialog(AddPolitician.this);
         progressDialog.setMessage("Please Wait...");
         progressDialog.setTitle("Adding Politician");
+        path= FirebaseStorage.getInstance().getReference();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+
+        super.onActivityResult(requestCode,resultCode,data);
+        if(requestCode==GALLERY_CODE && resultCode==RESULT_OK){
+            uri=data.getData();
+            img.setImageURI(uri);
+        }
+
     }
 
 
@@ -110,63 +153,80 @@ public class AddPolitician extends AppCompatActivity {
         final String pName=name.getText().toString().trim();
         final String pPosition=position.getText().toString().trim();
         final String pPartylist=spinner.getSelectedItem().toString();
-        dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
-        dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        StorageReference filepath=path.child("pImage").child(uri.getLastPathSegment());
+        filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.exists()){
-                    dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
-                    final DatabaseReference addPol=dbRef.push();
-                    dbRef.addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                final Uri finalUri=taskSnapshot.getDownloadUrl();
+                String get="";
+                if(!finalUri.toString().isEmpty()){
+                    get=finalUri.toString();
+                }
+                final String image=get;
 
-                            Map newPost=new HashMap();
-                            newPost.put("name",pName);
-                            newPost.put("position",pPosition);
-                            newPost.put("partylist",pPartylist);
-                            dbRef.setValue(newPost);
+                dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
+                dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(!dataSnapshot.exists()){
+                            dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(pName);
+                            final DatabaseReference addPol=dbRef.push();
+                            dbRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                    Map newPost=new HashMap();
+                                    newPost.put("name",pName);
+                                    newPost.put("position",pPosition);
+                                    newPost.put("partylist",pPartylist);
+                                    newPost.put("image",image);
+                                    dbRef.setValue(newPost);
                                     FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
                                     String uid=dbKey.getReference("PartyList").push().getKey();
                                     final DatabaseReference dbParty=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist).child("members").child(pName);
                                     final DatabaseReference addPost=dbParty.push();
                                     Map partyMap=new HashMap();
-                            partyMap.put("name",pName);
-                            partyMap.put("position",pPosition);
-                            dbParty.setValue(partyMap);
+                                    partyMap.put("name",pName);
+                                    partyMap.put("position",pPosition);
+                                    partyMap.put("image",image);
+                                    dbParty.setValue(partyMap);
                                     //addPost.child("name").setValue(pName);
                                     //addPost.child("position").setValue(pPosition).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                      //  @Override
-                                        //public void onComplete(@NonNull Task<Void> task) {
-                                            progressDialog.dismiss();
-                                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
-                                            startActivity(new Intent(AddPolitician.this,UserHomepage.class));
+                                    //  @Override
+                                    //public void onComplete(@NonNull Task<Void> task) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(AddPolitician.this,UserHomepage.class));
 
-                                        //}
-                               //     });
+                                    //}
+                                    //     });
 
+
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    progressDialog.dismiss();
+
+                                }
+                            });
 
 
                         }
+                        progressDialog.dismiss();
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
-                            progressDialog.dismiss();
+                    }
 
-                        }
-                    });
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-
-                }
-                progressDialog.dismiss();
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
 
             }
         });
+
 
 
 

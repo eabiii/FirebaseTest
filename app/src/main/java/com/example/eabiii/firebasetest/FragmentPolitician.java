@@ -135,7 +135,7 @@ public class FragmentPolitician extends Fragment {
                     holder.getTxtPoli().setText(model.getName());
                     holder.getTxtParty().setText(model.getPosition());
                     holder.getTxtPos().setText(model.getPartylist());
-                    //  Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+                    Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
                     holder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {

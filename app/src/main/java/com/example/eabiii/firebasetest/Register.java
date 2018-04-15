@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.method.PasswordTransformationMethod;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -53,7 +54,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         progressDialog.setTitle("Registering User");
         emailAdd=(EditText)findViewById(R.id.email_Edit);
         password=(EditText)findViewById(R.id.pw_Edit);
+        password.setTransformationMethod(PasswordTransformationMethod.getInstance());
         confirmPassword=(EditText)findViewById(R.id.pw2_Edit);
+        confirmPassword.setTransformationMethod(new PasswordTransformationMethod());
         firstName=(EditText)findViewById(R.id.fName_Edit);
         lastName=(EditText)findViewById(R.id.lName_Edit);
         username=(EditText)findViewById(R.id.uName_Edit);

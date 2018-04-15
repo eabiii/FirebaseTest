@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,8 +36,9 @@ import java.util.List;
 
 public class ViewPolitician extends AppCompatActivity {
 
-    private TextView txtpName,txtpPosi,txtpParty;
+    private TextView txtpName,txtpPosi,txtpParty,txtEmpty;
     private Button rateButton;
+    private ImageView img;
     RatingBar rateBar;
     List<Float>dbRatings=new ArrayList<>();
     RecyclerView rvPolitician;
@@ -67,6 +70,8 @@ public class ViewPolitician extends AppCompatActivity {
         lm.setReverseLayout(true);
         rvPolitician.setLayoutManager(lm);
         rateBar=findViewById(R.id.ratingBar);
+        img=findViewById(R.id.imagePoli);
+        txtEmpty=findViewById(R.id.emptytext);
 
         dbRef.child(POLI_KEY).addValueEventListener(new ValueEventListener() {
             @Override
@@ -74,9 +79,11 @@ public class ViewPolitician extends AppCompatActivity {
                 String name=(String)dataSnapshot.child("name").getValue();
                 String position=(String)dataSnapshot.child("position").getValue();
                 String partylist=(String)dataSnapshot.child("partylist").getValue();
+                String imgUrl=(String)dataSnapshot.child("image").getValue();
                 txtpName.setText(name);
                 txtpPosi.setText(position);
                 txtpParty.setText(partylist);
+                Picasso.with(ViewPolitician.this).load(imgUrl).fit().into(img);
 
             }
 
@@ -98,6 +105,7 @@ public class ViewPolitician extends AppCompatActivity {
         Log.d("Poliname",POLI_KEY);
         mAuth= FirebaseAuth.getInstance();
         setupFirebase();
+        checkChildren();
         computeRating();
 
     }
@@ -135,6 +143,28 @@ public class ViewPolitician extends AppCompatActivity {
         };
         fAdapter.startListening();
         rvPolitician.setAdapter(fAdapter);
+    }
+
+    private void checkChildren(){
+        dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(POLI_KEY).child("ratings");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if(dataSnapshot.hasChildren()){
+                    rvPolitician.setVisibility(View.VISIBLE);
+                    txtEmpty.setVisibility(View.INVISIBLE);
+                }
+                else{
+                    rvPolitician.setVisibility(View.INVISIBLE);
+                    txtEmpty.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void computeRating(){

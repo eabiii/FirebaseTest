@@ -6,12 +6,13 @@ package com.example.eabiii.firebasetest;
 
 public class PartylistModel {
 
-    private String partylist;
+    private String partylist,image;
 
     public PartylistModel(){}
 
-    public PartylistModel(String partylist) {
+    public PartylistModel(String partylist, String image) {
         this.partylist = partylist;
+        this.image=image;
     }
 
     public String getPartylist() {
@@ -20,5 +21,13 @@ public class PartylistModel {
 
     public void setPartylist(String partylist) {
         this.partylist = partylist;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

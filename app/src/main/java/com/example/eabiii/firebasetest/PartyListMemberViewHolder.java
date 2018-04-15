@@ -2,6 +2,7 @@ package com.example.eabiii.firebasetest;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -12,11 +13,13 @@ public class PartyListMemberViewHolder extends RecyclerView.ViewHolder {
 
 
     TextView txtParty,txtPosition;
+    ImageView imgView;
     View mView;
     public PartyListMemberViewHolder(View itemView) {
         super(itemView);
         this.txtParty=itemView.findViewById(R.id.memberName);
         this.txtPosition=itemView.findViewById(R.id.memberPosition);
+        this.imgView=itemView.findViewById(R.id.imagePoli);
         this.mView=itemView;
     }
 
@@ -43,4 +46,5 @@ public class PartyListMemberViewHolder extends RecyclerView.ViewHolder {
     public void setmView(View mView) {
         this.mView = mView;
     }
+    public ImageView getImgView(){return imgView;}
 }

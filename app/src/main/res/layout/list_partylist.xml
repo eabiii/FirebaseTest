@@ -21,7 +21,17 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:text="USER"
+            android:visibility="invisible"
             android:textSize="30sp" />
+
+        <ImageView
+            android:id="@+id/imageParty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
+            app:srcCompat="@drawable/addpartylist" />
 
 
     </RelativeLayout>

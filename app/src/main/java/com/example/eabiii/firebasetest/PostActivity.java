@@ -77,9 +77,22 @@ public class PostActivity extends AppCompatActivity {
                 final String dbTitle=title.getText().toString().trim();
                 final String dbDesc=desc.getText().toString().trim();
                 final String currUser=FirebaseDatabase.getInstance().getReference().child("Users").child(mCurrentUser.getUid()).child("username").toString();
-                if(dbTitle.isEmpty() && dbDesc.isEmpty()){
-                    Toast.makeText(PostActivity.this,"Please fill everything",Toast.LENGTH_LONG).show();
+                if(dbTitle.isEmpty()){
+                    title.setError("Title is required");
+                    title.requestFocus();
+                    return;
 
+                }
+                if(dbDesc.isEmpty()){
+                    desc.setError("Description is required");
+                    desc.requestFocus();
+                    return;
+
+                }
+                if(uri==null){
+                    title.setError("Image is required");
+                    title.requestFocus();
+                    return;
 
                 }
                 else{

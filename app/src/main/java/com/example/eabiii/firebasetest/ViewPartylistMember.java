@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
@@ -21,12 +22,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
 public class ViewPartylistMember extends AppCompatActivity {
     private TextView txtpParty,txtEmpty;
     private Button rateButton;
+    private ImageView imageView;
     private ArrayList<PoliticianModel> politicianModels=new ArrayList<>();
     String username="";
     FirebaseAuth mAuth;
@@ -48,7 +51,24 @@ public class ViewPartylistMember extends AppCompatActivity {
         rvPartyList=findViewById(R.id.memberView);
         rvPartyList.setLayoutManager(new LinearLayoutManager(this));
         rvPartyList.setItemAnimator(new DefaultItemAnimator());
+        imageView=findViewById(R.id.imageParty);
+        dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(POLI_KEY);
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String imgUrl=(String)dataSnapshot.child("image").getValue();
+                Log.d("IMGURL",imgUrl);
+                Picasso.with(ViewPartylistMember.this).load(imgUrl).fit().into(imageView);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        //getImage();
         checkChildren();
+
     }
 
 
@@ -82,7 +102,9 @@ public class ViewPartylistMember extends AppCompatActivity {
 
                  holder.getTxtPosition().setText(model.getPosition().toString());
                 holder.getTxtParty().setText(model.getName().toString());
-               // holder.setComment(model.getComment().toString());
+                Picasso.with(holder.imgView.getContext()).load(model.getImage()).into(holder.imgView);
+
+                // holder.setComment(model.getComment().toString());
 
             }
         };
@@ -90,6 +112,23 @@ public class ViewPartylistMember extends AppCompatActivity {
         rvPartyList.setAdapter(fAdapter);
 
 
+    }
+
+    private void getImage(){
+        dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child("image");
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String imgUrl=String.valueOf(dataSnapshot.getValue());
+                Log.d("IMGURL",imgUrl);
+                Picasso.with(ViewPartylistMember.this).load(imgUrl).fit().into(imageView);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void checkChildren(){

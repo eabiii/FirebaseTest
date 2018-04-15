@@ -26,6 +26,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
         titleList.add(title);
 
 
+
     }
 
 
@@ -37,6 +38,7 @@ public class FragmentAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
+
         return fragmentList.size();
     }
 }
