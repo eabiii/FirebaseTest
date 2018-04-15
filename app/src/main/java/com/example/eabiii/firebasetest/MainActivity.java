@@ -92,8 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                                     Intent intent = new Intent(MainActivity.this, UserHomepage.class);
                                     startActivity(intent);
-                                    finish();
-
+                                    MainActivity.this.finish();
                                 } else {
                                     progressDialog.dismiss();
                                     email.setError("Invalid Email or Password!");

@@ -100,6 +100,7 @@ public class ViewPolitician extends AppCompatActivity {
                 Intent intent=new Intent(ViewPolitician.this,RatePolitician.class);
                 intent.putExtra("Poli Info", POLI_KEY);
                 startActivity(intent);
+                ViewPolitician.this.finish();
             }
         });
         Log.d("Poliname",POLI_KEY);
@@ -143,6 +144,14 @@ public class ViewPolitician extends AppCompatActivity {
         };
         fAdapter.startListening();
         rvPolitician.setAdapter(fAdapter);
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent=new Intent(ViewPolitician.this,UserHomepage.class);
+        startActivity(intent);
+        finish();
+
     }
 
     private void checkChildren(){

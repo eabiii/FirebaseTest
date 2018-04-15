@@ -1,10 +1,12 @@
 package com.example.eabiii.firebasetest;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -43,6 +45,7 @@ public class RatePolitician extends AppCompatActivity {
     String POLI_INFO_KEY="";
     String username="";
     float ratingNumber=0;
+    ProgressDialog progressDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState){
@@ -57,34 +60,40 @@ public class RatePolitician extends AppCompatActivity {
         rate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(comments.getText().toString().trim().isEmpty()){
-                    comments.setError("Please enter a comment!");
-                    comments.requestFocus();
-                    return;
+             //   if(comments.getText().toString().trim().isEmpty()){
+              //      comments.setError("Please enter a comment!");
+              //      comments.requestFocus();
 
+
+              //  }
+                //else{
+                    progressDialog.show();
+                    FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
+                    String uid=dbKey.getReference("Politician").push().getKey();
+
+                DatabaseReference dbReference=FirebaseDatabase.getInstance().getReference().child("Politician").child(poliName.getText().toString()).child("ratings").child(uid);
+
+                    String saveComment=comments.getText().toString().trim();
+                    Map newPost=new HashMap();
+                    newPost.put("username",username);
+                    newPost.put("comment",saveComment);
+                    newPost.put("rating",ratingNumber);
+                    newPost.put("time", ServerValue.TIMESTAMP);
+                dbReference.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Log.d("RATED",Float.toString(ratingNumber));
+                            progressDialog.dismiss();
+                            Toast.makeText(getApplicationContext(),"Politician Rated!",Toast.LENGTH_SHORT).show();
+                            Intent intent=new Intent(RatePolitician.this,ViewPolitician.class);
+                            intent.putExtra("Poli Name", POLI_INFO_KEY);
+                            startActivity(intent);
+                            RatePolitician.this.finish();
+                        }
+                    });
                 }
-                FirebaseDatabase dbKey=FirebaseDatabase.getInstance();
-                String uid=dbKey.getReference("Politician").push().getKey();
-                dbRef=FirebaseDatabase.getInstance().getReference().child("Politician").child(poliName.getText().toString()).child("ratings").child(uid);
-
-                String saveComment=comments.getText().toString().trim();
-                Map newPost=new HashMap();
-                newPost.put("username",username);
-                newPost.put("comment",saveComment);
-                newPost.put("rating",ratingNumber);
-                newPost.put("time", ServerValue.TIMESTAMP);
-                dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        Toast.makeText(getApplicationContext(),"Politician Rated!",Toast.LENGTH_SHORT).show();
-                        Intent intent=new Intent(RatePolitician.this,ViewPolitician.class);
-                        intent.putExtra("Poli Name",poliName.getText().toString().trim());
-                        startActivity(intent);
-
-                    }
-                });
                // Snackbar.make(view,"Rate "+ratingNumber,Snackbar.LENGTH_LONG).setAction("Action",null).show();
-            }
+           // }
         });
         ratingBar=findViewById(R.id.ratingBar);
         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
@@ -122,10 +131,13 @@ public class RatePolitician extends AppCompatActivity {
                 Intent intent=new Intent(RatePolitician.this,ViewPolitician.class);
                 intent.putExtra("Poli Name", POLI_INFO_KEY);
                 startActivity(intent);
+                RatePolitician.this.finish();
             }
         });
 
-
+        progressDialog=new ProgressDialog(RatePolitician.this);
+        progressDialog.setMessage("Please Wait...");
+        progressDialog.setTitle("Rating Politician");
         setupFirebase();
 
     }
@@ -136,7 +148,14 @@ public class RatePolitician extends AppCompatActivity {
         super.onStart();
     }
 
+    @Override
+    public void onBackPressed(){
+        Intent intent=new Intent(RatePolitician.this,ViewPolitician.class);
+        intent.putExtra("Poli Name", POLI_INFO_KEY);
+        startActivity(intent);
+        RatePolitician.this.finish();
 
+    }
 
 
     private void setupFirebase(){

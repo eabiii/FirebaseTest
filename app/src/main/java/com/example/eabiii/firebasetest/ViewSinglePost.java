@@ -2,6 +2,7 @@ package com.example.eabiii.firebasetest;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -147,7 +148,7 @@ public class ViewSinglePost extends AppCompatActivity {
         checkChildren();
 
         //setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         //ActionBar actionBar=getActionBar();
 
 
@@ -213,6 +214,13 @@ public class ViewSinglePost extends AppCompatActivity {
         fAdapter.startListening();
         rvComment.setAdapter(fAdapter);
 
+    }
+
+@Override
+    public void onBackPressed(){
+        Intent intent=new Intent(ViewSinglePost.this,UserHomepage.class);
+        startActivity(intent);
+        finish();
     }
 
     private void checkChildren(){

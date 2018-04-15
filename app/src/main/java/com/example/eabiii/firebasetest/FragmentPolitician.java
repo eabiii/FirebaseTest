@@ -72,6 +72,8 @@ public class FragmentPolitician extends Fragment {
                 if(isConnected()) {
 
                     startActivity(new Intent(getActivity(),AddPolitician.class));
+                    getActivity().finish();
+
                     //
                 }
                 else{
@@ -143,6 +145,8 @@ public class FragmentPolitician extends Fragment {
                             Intent intent = new Intent(getActivity(), ViewPolitician.class);
                             intent.putExtra("Poli Name", POST_KEY);
                             startActivity(intent);
+                            getActivity().finish();
+
                         }
                     });
                 }

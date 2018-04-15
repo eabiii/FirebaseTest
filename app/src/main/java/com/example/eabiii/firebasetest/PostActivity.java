@@ -62,7 +62,7 @@ public class PostActivity extends AppCompatActivity {
         mCurrentUser=mAuth.getCurrentUser();
         dbUser=FirebaseDatabase.getInstance().getReference().child("Users").child(encodeString(mCurrentUser.getEmail()));
         loadInfo();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -151,7 +151,7 @@ public class PostActivity extends AppCompatActivity {
 
                                                     Toast.makeText(getApplicationContext(),"Sucessfully Posted!",Toast.LENGTH_SHORT).show();
                                                     startActivity(new Intent(PostActivity.this,UserHomepage.class));
-                                                }
+                                                    PostActivity.this.finish();                                                }
                                             });
 
                                         }
@@ -192,6 +192,14 @@ public class PostActivity extends AppCompatActivity {
             img.setImageURI(uri);
 
         }
+
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent=new Intent(PostActivity.this,UserHomepage.class);
+        startActivity(intent);
+        finish();
 
     }
 

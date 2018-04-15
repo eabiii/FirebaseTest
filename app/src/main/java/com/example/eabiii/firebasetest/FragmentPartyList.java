@@ -92,7 +92,7 @@ public class FragmentPartyList extends Fragment {
                 if(isConnected()) {
 
                     startActivity(new Intent(getActivity(),AddPartyList.class));
-                  //  getActivity().finish();
+                     getActivity().finish();
                 }
                 else{
 
@@ -160,6 +160,8 @@ public class FragmentPartyList extends Fragment {
                         intent.putExtra("Party List", PARTY_KEY);
 
                         startActivity(intent);
+                        getActivity().finish();
+
                     }
                 });
             }

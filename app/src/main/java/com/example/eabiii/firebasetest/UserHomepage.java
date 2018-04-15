@@ -176,6 +176,14 @@ public class UserHomepage extends AppCompatActivity implements BottomNavigationV
             return false;
     }
 
+    @Override
+    public void onBackPressed(){
+       // Intent intent=new Intent(ViewPolitician.this,UserHomepage.class);
+       // startActivity(intent);
+        //finish();
+
+    }
+
 
 
     private void setupViewPager(ViewPager viewPager){

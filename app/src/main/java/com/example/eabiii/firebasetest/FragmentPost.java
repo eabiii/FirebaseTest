@@ -85,7 +85,9 @@ public class FragmentPost extends Fragment {
             public void onClick(View view) {
                 if(isConnected()) {
 
-                    startActivity(new Intent(getActivity(),PostActivity.class));                }
+                    startActivity(new Intent(getActivity(),PostActivity.class));
+                    getActivity().finish();
+                }
                 else{
 
                     AlertDialog alertDialog=new AlertDialog.Builder(getActivity()).create();
@@ -163,6 +165,7 @@ public class FragmentPost extends Fragment {
                             Intent intent = new Intent(getActivity(), ViewSinglePost.class);
                             intent.putExtra("Post ID", POST_KEY);
                             startActivity(intent);
+                            getActivity().finish();
                         }
                     });
                 }

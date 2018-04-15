@@ -87,6 +87,7 @@ public class FragmentProfile extends Fragment {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(),PostActivity.class));
+                getActivity().finish();
                 Snackbar.make(view,"Add Post",Snackbar.LENGTH_LONG).setAction("Action",null).show();
             }
         });

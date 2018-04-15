@@ -21,27 +21,32 @@
         </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".Register" />
-        <activity android:name=".UserHomepage" />
+        <activity android:name=".UserHomepage"
+            android:launchMode="singleTop"/>
         <activity
             android:name=".PostActivity"
-            android:parentActivityName=".UserHomepage" />
+             />
         <activity
             android:name=".ViewSinglePost"
             android:windowSoftInputMode="stateHidden|adjustPan"
-            android:parentActivityName=".UserHomepage" />
+             />
         <activity
             android:name=".ViewPolitician"
-            android:parentActivityName=".UserHomepage" />
-        <activity android:name=".RatePolitician" />
+             />
+        <activity android:name=".RatePolitician"
+            android:launchMode="singleTop"
+            />
         <activity
             android:name=".AddPartyList"
-            android:parentActivityName=".UserHomepage" />
+            android:launchMode="singleTop"
+            />
         <activity
             android:name=".AddPolitician"
-            android:parentActivityName=".UserHomepage" />
+            android:launchMode="singleTop"
+            />
         <activity
             android:name=".ViewPartylistMember"
-            android:parentActivityName=".UserHomepage" />
+            />
         <activity android:name=".Settings" />
         <activity android:name=".ChangePassword" />
         <activity android:name=".ChangeUsername"></activity>

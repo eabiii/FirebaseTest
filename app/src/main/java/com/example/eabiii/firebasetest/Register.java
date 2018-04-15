@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Date;
 
 public class Register extends AppCompatActivity implements View.OnClickListener{
 
@@ -71,6 +72,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
 
                 DatePickerDialog dialog=new DatePickerDialog(Register.this,android.R.style.Theme_Holo_Light_Dialog_MinWidth,dateSetListener,year,month,day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                dialog.getDatePicker().setMaxDate(new Date().getTime());
+              //  dialog.getDatePicker().setMinDate(System.currentTimeMillis() - 1000);
+
                 dialog.show();
 
             }
@@ -105,6 +109,25 @@ public class Register extends AppCompatActivity implements View.OnClickListener{
         String confirm=confirmPassword.getText().toString().trim();
         String user=username.getText().toString().trim();
 
+        if(firstName.getText().toString().isEmpty()){
+
+            firstName.setError("First Name is required");
+            firstName.requestFocus();
+            return;
+        }
+        if(lastName.getText().toString().isEmpty()){
+
+            lastName.setError("Last Name is required");
+            lastName.requestFocus();
+            return;
+        }
+
+        if(birthDate==null){
+
+            birthDate.setError("Last Name is required");
+            birthDate.requestFocus();
+            return;
+        }
 
 
         if(email.isEmpty()){

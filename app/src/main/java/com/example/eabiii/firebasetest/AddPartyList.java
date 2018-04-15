@@ -60,6 +60,12 @@ public class AddPartyList extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d("CLICK ME","CLICK");
+                if(partylist.getText().toString().isEmpty()){
+                    partylist.setError("Name of Partylist is required");
+                    partylist.requestFocus();
+                    return;
+
+                }
                 addPartylist();
             }
         });
@@ -112,14 +118,26 @@ public class AddPartyList extends AppCompatActivity {
                 }
                 final String image=get;
                 final String pPartylist=partylist.getText().toString().trim();
-                dbRef=FirebaseDatabase.getInstance().getReference().child("Partylist").child(pPartylist);
+                dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
+                Map newPost=new HashMap();
+                //  newPost.put("name",pPartylist);
+                newPost.put("partylist",pPartylist);
+                newPost.put("image",image);
+                dbRef.setValue(newPost).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        progressDialog.dismiss();
+                        Toast.makeText(getApplicationContext(),"Partylist Added!",Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(AddPartyList.this,UserHomepage.class));
+                        AddPartyList.this.finish();
+                    }
+                });
+                /*
                 dbRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if(!dataSnapshot.exists()){
-
                             dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(pPartylist);
-
                             final DatabaseReference addPol=dbRef.push();
                             dbRef.addValueEventListener(new ValueEventListener() {
                                 @Override
@@ -133,8 +151,9 @@ public class AddPartyList extends AppCompatActivity {
                                         @Override
                                         public void onComplete(@NonNull Task<Void> task) {
                                             progressDialog.dismiss();
-                                            Toast.makeText(getApplicationContext(),"Sucessfully Added!",Toast.LENGTH_SHORT).show();
+                                            Toast.makeText(getApplicationContext(),"Partylist Added!",Toast.LENGTH_SHORT).show();
                                             startActivity(new Intent(AddPartyList.this,UserHomepage.class));
+                                            AddPartyList.this.finish();
                                         }
                                     });
 
@@ -154,12 +173,25 @@ public class AddPartyList extends AppCompatActivity {
 
                     }
                 });
+                */
             }
         });
 
 
 
 
+
+    }
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+    }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent=new Intent(AddPartyList.this,UserHomepage.class);
+        startActivity(intent);
+        finish();
 
     }
 

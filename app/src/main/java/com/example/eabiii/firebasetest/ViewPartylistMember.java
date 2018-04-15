@@ -1,5 +1,6 @@
 package com.example.eabiii.firebasetest;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -130,6 +131,15 @@ public class ViewPartylistMember extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onBackPressed(){
+        Intent intent=new Intent(ViewPartylistMember.this,UserHomepage.class);
+        startActivity(intent);
+        finish();
+
+    }
+
 
     private void checkChildren(){
         dbRef=FirebaseDatabase.getInstance().getReference().child("PartyList").child(POLI_KEY).child("members");
